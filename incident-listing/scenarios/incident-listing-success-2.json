@@ -1,0 +1,47 @@
+{
+  "id": "incident-listing-success-2",
+  "name": "List incidents with a specific state",
+  "description": "Test the agent's ability to filter incidents by state.",
+  "skillName": "incident-listing",
+  "type": "success",
+  "input": {
+    "prompt": "List all incidents that are currently raised."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "I found",
+      "incident",
+      "raised",
+      "state"
+    ],
+    "shouldNotContain": [
+      "cleared",
+      "error",
+      "createIncident"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "listIncident"
+    ],
+    "mustNotCallTools": [
+      "createIncident"
+    ],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "raised"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "incident-listing",
+      "filtering"
+    ],
+    "createdAt": "2025-12-24T09:44:16.537Z",
+    "updatedAt": "2025-12-24T09:44:16.543Z"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "id": "hubspot-whoami-nango-edge-case-4",
+  "name": "No HubSpot connection available",
+  "description": "Tests the scenario where there is no HubSpot connection available in Nango and ensures the agent provides relevant instructions to the user.",
+  "skillName": "hubspot-whoami-nango",
+  "type": "edge-case",
+  "input": {
+    "prompt": "Attempt to get my HubSpot user ID and email using the Nango whoami tool, but assume there is no existing HubSpot connection. Explain to the user how to create a connection."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "connection",
+      "hubspot",
+      "nango-mcp"
+    ],
+    "shouldNotContain": [
+      "error",
+      "@"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [
+      "call_nango_mcp_tool"
+    ],
+    "responseChecks": []
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "edge-case",
+      "nango",
+      "connection",
+      "hubspot"
+    ],
+    "createdAt": "2026-01-05T21:31:26.142Z",
+    "updatedAt": "2026-01-05T21:31:26.147Z"
+  }
+}

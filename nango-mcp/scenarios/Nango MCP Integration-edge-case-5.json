@@ -1,0 +1,50 @@
+{
+  "id": "Nango MCP Integration-edge-case-5",
+  "name": "User asks to list contacts before authentication",
+  "description": "Should direct the user towards authenticating, but not try to make the request until authenticated",
+  "skillName": "Nango MCP Integration",
+  "type": "edge-case",
+  "input": {
+    "prompt": "List all my HubSpot contacts"
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "authenticate",
+      "hubspot",
+      "check if you are authenticated"
+    ],
+    "shouldNotContain": [
+      "connectionId",
+      "providerConfigKey",
+      "list_contacts"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "authenticate"
+      },
+      {
+        "type": "contains",
+        "value": "hubspot"
+      },
+      {
+        "type": "not-contains",
+        "value": "connectionId"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "edge-case",
+      "hubspot",
+      "authentication"
+    ],
+    "createdAt": "2026-01-05T19:06:54.019Z",
+    "updatedAt": "2026-01-05T19:06:54.026Z"
+  }
+}

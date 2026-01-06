@@ -1,0 +1,38 @@
+{
+  "id": "hubspot-whoami-nango-failure-2",
+  "name": "Handle missing Nango secret key",
+  "description": "Tests the agent's response when the NANGO_SECRET_KEY environment variable is missing, which should result in an error.",
+  "skillName": "hubspot-whoami-nango",
+  "type": "failure",
+  "input": {
+    "prompt": "Call the HubSpot whoami tool via the Nango MCP server without a NANGO_SECRET_KEY. Report any errors encountered."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "error",
+      "NANGO_SECRET_KEY"
+    ],
+    "shouldNotContain": [
+      "success",
+      "@"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [
+      "call_nango_mcp_tool"
+    ],
+    "responseChecks": []
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "failure",
+      "nango",
+      "secret-key",
+      "error-handling"
+    ],
+    "createdAt": "2026-01-05T21:31:26.142Z",
+    "updatedAt": "2026-01-05T21:31:26.145Z"
+  }
+}

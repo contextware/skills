@@ -1,0 +1,45 @@
+{
+  "id": "incident-listing-success-1",
+  "name": "List all incidents successfully",
+  "description": "Verify the agent can list all incidents when no filters are specified.",
+  "skillName": "incident-listing",
+  "type": "success",
+  "input": {
+    "prompt": "Show me all current incidents."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "I found",
+      "incident",
+      "state",
+      "priority"
+    ],
+    "shouldNotContain": [
+      "error",
+      "createIncident"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "listIncident"
+    ],
+    "mustNotCallTools": [
+      "createIncident"
+    ],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "I found"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "easy",
+    "tags": [
+      "success",
+      "incident-listing"
+    ],
+    "createdAt": "2025-12-24T09:44:16.537Z",
+    "updatedAt": "2025-12-24T09:44:16.540Z"
+  }
+}

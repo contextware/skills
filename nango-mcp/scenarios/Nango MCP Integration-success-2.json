@@ -1,0 +1,52 @@
+{
+  "id": "Nango MCP Integration-success-2",
+  "name": "Needs Authentication for Salesforce",
+  "description": "Tests the scenario where user needs to authenticate with Salesforce, providing the correct authUrl.",
+  "skillName": "Nango MCP Integration",
+  "type": "success",
+  "input": {
+    "prompt": "I need to connect to Salesforce. Please check if I need to authenticate."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "status",
+      "needs_auth",
+      "authUrl",
+      "salesforce",
+      "authenticate"
+    ],
+    "shouldNotContain": [
+      "success",
+      "error",
+      "connectionId"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "needs_auth"
+      },
+      {
+        "type": "contains",
+        "value": "authUrl"
+      },
+      {
+        "type": "contains",
+        "value": "salesforce"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "salesforce",
+      "authentication"
+    ],
+    "createdAt": "2026-01-05T19:06:54.019Z",
+    "updatedAt": "2026-01-05T19:06:54.023Z"
+  }
+}

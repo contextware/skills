@@ -1,0 +1,48 @@
+{
+  "id": "incident-listing-success-4",
+  "name": "List incidents with priority filtering",
+  "description": "Verify incidents can be filtered by priority level.",
+  "skillName": "incident-listing",
+  "type": "success",
+  "input": {
+    "prompt": "Are there any critical incidents currently?"
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "I found",
+      "incident",
+      "critical",
+      "priority"
+    ],
+    "shouldNotContain": [
+      "low",
+      "medium",
+      "error",
+      "createIncident"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "listIncident"
+    ],
+    "mustNotCallTools": [
+      "createIncident"
+    ],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "critical"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "incident-listing",
+      "filtering"
+    ],
+    "createdAt": "2025-12-24T09:44:16.537Z",
+    "updatedAt": "2025-12-24T09:44:16.549Z"
+  }
+}

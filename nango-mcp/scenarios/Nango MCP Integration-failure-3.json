@@ -1,0 +1,51 @@
+{
+  "id": "Nango MCP Integration-failure-3",
+  "name": "Invalid Provider Name",
+  "description": "Handling an invalid provider name gracefully by informing user of providers",
+  "skillName": "Nango MCP Integration",
+  "type": "failure",
+  "input": {
+    "prompt": "I want to connect to BananaCRM. Check if I'm authenticated."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "invalid provider",
+      "hubspot",
+      "salesforce",
+      "error"
+    ],
+    "shouldNotContain": [
+      "status",
+      "connectionId",
+      "authUrl"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "invalid provider"
+      },
+      {
+        "type": "contains",
+        "value": "hubspot"
+      },
+      {
+        "type": "contains",
+        "value": "salesforce"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "failure",
+      "invalid-input",
+      "validation"
+    ],
+    "createdAt": "2026-01-05T19:06:54.019Z",
+    "updatedAt": "2026-01-05T19:06:54.024Z"
+  }
+}

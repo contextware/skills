@@ -1,0 +1,52 @@
+{
+  "id": "internal-comms-success-3",
+  "name": "FAQ Response Generation",
+  "description": "Tests the agent's ability to generate an FAQ response for a specific question about remote work policy.",
+  "skillName": "internal-comms",
+  "type": "success",
+  "input": {
+    "prompt": "Answer this FAQ: What is our policy on remote work for the next quarter, considering recent office renovations?"
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "FAQ",
+      "Remote Work",
+      "Policy",
+      "Next Quarter",
+      "Office Renovations"
+    ],
+    "shouldNotContain": [
+      "3P Update",
+      "incident report"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "Remote Work"
+      },
+      {
+        "type": "contains",
+        "value": "Policy"
+      },
+      {
+        "type": "contains",
+        "value": "Office Renovations"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "FAQ",
+      "remote work",
+      "policy"
+    ],
+    "createdAt": "2025-12-23T15:04:02.082Z",
+    "updatedAt": "2025-12-23T15:04:02.084Z"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "id": "hubspot-whoami-nango-success-1",
+  "name": "Successful retrieval of HubSpot user information",
+  "description": "Tests the successful retrieval of a HubSpot user's ID and email using the Nango MCP server and the whoami tool.",
+  "skillName": "hubspot-whoami-nango",
+  "type": "success",
+  "input": {
+    "prompt": "Connect to the Nango MCP server. Use the HubSpot whoami tool to get my user ID and email address and return them to me."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "id",
+      "email",
+      "@"
+    ],
+    "shouldNotContain": [
+      "error",
+      "failed"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "@"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "hubspot",
+      "nango",
+      "whoami"
+    ],
+    "createdAt": "2026-01-05T21:31:26.142Z",
+    "updatedAt": "2026-01-05T21:31:26.143Z"
+  }
+}

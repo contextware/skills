@@ -1,0 +1,41 @@
+{
+  "id": "hubspot-whoami-nango-success-5",
+  "name": "Retrieve only the user ID",
+  "description": "Request only one piece of user information (the ID) so the agent must correctly parse the whoamitool result.",
+  "skillName": "hubspot-whoami-nango",
+  "type": "success",
+  "input": {
+    "prompt": "Connect to the nango MCP server and use the HubSpot whoami tool to get my user ID. Return only the user ID."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "id"
+    ],
+    "shouldNotContain": [
+      "error",
+      "email",
+      "@"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "id"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "hubspot",
+      "nango",
+      "whoami"
+    ],
+    "createdAt": "2026-01-05T21:31:26.142Z",
+    "updatedAt": "2026-01-05T21:31:26.148Z"
+  }
+}
