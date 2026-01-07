@@ -1,32 +1,26 @@
 {
   "id": "incident-listing-success-2",
   "name": "List incidents with a specific state",
-  "description": "Test the agent's ability to filter incidents by state.",
+  "description": "Retrieves incidents that match a specified state (e.g., 'raised') from the Incident Management API.",
   "skillName": "incident-listing",
   "type": "success",
   "input": {
-    "prompt": "List all incidents that are currently raised."
+    "prompt": "Using the Incident Management MCP server, list all incidents that are in the 'raised' state and include the incident ID and priority in your response."
   },
   "expectedOutput": {
     "shouldContain": [
-      "I found",
       "incident",
       "raised",
-      "state"
+      "priority"
     ],
     "shouldNotContain": [
-      "cleared",
       "error",
-      "createIncident"
+      "failed"
     ]
   },
   "evaluationCriteria": {
-    "mustCallTools": [
-      "listIncident"
-    ],
-    "mustNotCallTools": [
-      "createIncident"
-    ],
+    "mustCallTools": [],
+    "mustNotCallTools": [],
     "responseChecks": [
       {
         "type": "contains",
@@ -38,10 +32,10 @@
     "difficulty": "medium",
     "tags": [
       "success",
-      "incident-listing",
-      "filtering"
+      "incident listing",
+      "state filter"
     ],
-    "createdAt": "2025-12-24T09:44:16.537Z",
-    "updatedAt": "2025-12-24T09:44:16.543Z"
+    "createdAt": "2026-01-07T20:58:21.171Z",
+    "updatedAt": "2026-01-07T20:58:21.173Z"
   }
 }

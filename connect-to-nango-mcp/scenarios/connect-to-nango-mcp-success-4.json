@@ -1,0 +1,41 @@
+{
+  "id": "connect-to-nango-mcp-success-4",
+  "name": "Successful Salesforce record creation",
+  "description": "Test successful creation of a Salesforce record using the nango MCP server.",
+  "skillName": "connect-to-nango-mcp",
+  "type": "success",
+  "input": {
+    "prompt": "Use the nango MCP server to create a record in Salesforce. Return the ID of the newly created record."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "record",
+      "created",
+      "ID"
+    ],
+    "shouldNotContain": [
+      "error",
+      "failed"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "ID"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "salesforce",
+      "create_record"
+    ],
+    "createdAt": "2026-01-06T21:39:23.961Z",
+    "updatedAt": "2026-01-06T21:39:23.965Z"
+  }
+}

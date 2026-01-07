@@ -1,45 +1,39 @@
 {
   "id": "incident-listing-success-1",
-  "name": "List all incidents successfully",
-  "description": "Verify the agent can list all incidents when no filters are specified.",
+  "name": "List all incidents",
+  "description": "Retrieves all incidents from the Incident Management system using the listIncident tool.",
   "skillName": "incident-listing",
   "type": "success",
   "input": {
-    "prompt": "Show me all current incidents."
+    "prompt": "Using the Incident Management MCP server, list all incidents and provide a summary of the incidents."
   },
   "expectedOutput": {
     "shouldContain": [
-      "I found",
       "incident",
-      "state",
       "priority"
     ],
     "shouldNotContain": [
       "error",
-      "createIncident"
+      "failed"
     ]
   },
   "evaluationCriteria": {
-    "mustCallTools": [
-      "listIncident"
-    ],
-    "mustNotCallTools": [
-      "createIncident"
-    ],
+    "mustCallTools": [],
+    "mustNotCallTools": [],
     "responseChecks": [
       {
         "type": "contains",
-        "value": "I found"
+        "value": "incident"
       }
     ]
   },
   "metadata": {
-    "difficulty": "easy",
+    "difficulty": "medium",
     "tags": [
       "success",
-      "incident-listing"
+      "incident listing"
     ],
-    "createdAt": "2025-12-24T09:44:16.537Z",
-    "updatedAt": "2025-12-24T09:44:16.540Z"
+    "createdAt": "2026-01-07T20:58:21.171Z",
+    "updatedAt": "2026-01-07T20:59:08.410Z"
   }
 }

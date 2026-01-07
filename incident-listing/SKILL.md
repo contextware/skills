@@ -11,6 +11,19 @@ license: Complete terms in LICENSE.txt
 
 This skill enables the agent to retrieve incidents from the Incident Management system via the MCP server.
 
+## MCP Server Requirements
+
+This skill requires the **Incident Management** MCP server to be connected.
+
+**What it provides:**
+- `listIncident` - Retrieve incidents from the system
+- `createIncident` - Create new incidents (used by the incident-creation skill)
+
+**Connection:**
+If your agent doesn't already have this MCP server connected, add it using your platform's MCP configuration method. The server implements the TMF724 Incident Management API.
+
+---
+
 The MCP server exposes **only two tools**:
 
 * `listIncident`

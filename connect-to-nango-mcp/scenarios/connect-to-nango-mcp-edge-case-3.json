@@ -1,0 +1,41 @@
+{
+  "id": "connect-to-nango-mcp-edge-case-3",
+  "name": "Attempt to create a contact without proper formatting",
+  "description": "This tests the edge case where the input data for creating a HubSpot contact is malformed, leading to an error.",
+  "skillName": "connect-to-nango-mcp",
+  "type": "edge-case",
+  "input": {
+    "prompt": "Using the nango MCP server, attempt to create a contact in HubSpot with missing required fields. Report any error messages encountered."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "error",
+      "required",
+      "field"
+    ],
+    "shouldNotContain": [
+      "success"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "error"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "edge-case",
+      "hubspot",
+      "create_contact",
+      "error-handling"
+    ],
+    "createdAt": "2026-01-06T21:39:23.961Z",
+    "updatedAt": "2026-01-06T21:39:23.964Z"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "id": "connect-to-nango-mcp-success-1",
+  "name": "Successful HubSpot contact retrieval",
+  "description": "Verifies the agent can retrieve a list of contacts from HubSpot using the nango MCP server.",
+  "skillName": "connect-to-nango-mcp",
+  "type": "success",
+  "input": {
+    "prompt": "Connect to the nango MCP server. Use the HubSpot tool to list contacts and return the contact list, including their email addresses and names."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "email",
+      "@",
+      "name"
+    ],
+    "shouldNotContain": [
+      "error",
+      "failed"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "@"
+      },
+      {
+        "type": "contains",
+        "value": "name"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "hubspot",
+      "nango",
+      "list_contacts"
+    ],
+    "createdAt": "2026-01-06T21:39:23.961Z",
+    "updatedAt": "2026-01-06T21:39:23.962Z"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "connect-to-nango-mcp-failure-2",
+  "name": "Handle missing Nango secret key",
+  "description": "Tests the agent's ability to handle a scenario where the NANGO_SECRET_KEY environment variable is not set.",
+  "skillName": "connect-to-nango-mcp",
+  "type": "failure",
+  "input": {
+    "prompt": "Attempt to connect to the nango MCP server without a valid NANGO_SECRET_KEY, then attempt to call the HubSpot whoami tool. Report the error message."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "error",
+      "NANGO_SECRET_KEY",
+      "required"
+    ],
+    "shouldNotContain": [
+      "success"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": []
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "failure",
+      "nango",
+      "secret_key"
+    ],
+    "createdAt": "2026-01-06T21:39:23.961Z",
+    "updatedAt": "2026-01-06T21:39:23.963Z"
+  }
+}
