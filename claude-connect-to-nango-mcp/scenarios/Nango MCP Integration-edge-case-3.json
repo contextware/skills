@@ -1,0 +1,38 @@
+{
+  "id": "Nango MCP Integration-edge-case-3",
+  "name": "Re-authentication flow for HubSpot",
+  "description": "Simulates an expired HubSpot connection and triggers the re-authentication flow.",
+  "skillName": "Nango MCP Integration",
+  "type": "edge-case",
+  "input": {
+    "prompt": "Simulate an expired HubSpot connection. Initiate the re-authentication process via the Nango MCP server and provide the authentication URL."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "authUrl",
+      "connect.nango.dev"
+    ],
+    "shouldNotContain": [
+      "error"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "authUrl"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "edge-case",
+      "re-authentication"
+    ],
+    "createdAt": "2026-01-17T17:04:09.782Z",
+    "updatedAt": "2026-01-17T17:04:09.795Z"
+  }
+}
