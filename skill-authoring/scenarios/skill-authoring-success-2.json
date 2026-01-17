@@ -1,0 +1,44 @@
+{
+  "id": "skill-authoring-success-2",
+  "name": "Generate MCP server requirements with placeholders",
+  "description": "Requests the agent to output MCP server requirements, specifying the inclusion of server name, transport type, URL, and required headers, but without providing concrete values.",
+  "skillName": "skill-authoring",
+  "type": "success",
+  "input": {
+    "prompt": "Generate MCP server requirements including server name, transport type, URL, and required headers. Return the MCP server requirements."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "server name",
+      "transport type",
+      "URL",
+      "required headers"
+    ],
+    "shouldNotContain": [
+      "error"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "server name"
+      },
+      {
+        "type": "contains",
+        "value": "transport type"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "MCP server"
+    ],
+    "createdAt": "2026-01-17T17:23:47.648Z",
+    "updatedAt": "2026-01-17T17:23:47.654Z"
+  }
+}

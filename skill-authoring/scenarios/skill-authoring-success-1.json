@@ -1,0 +1,44 @@
+{
+  "id": "skill-authoring-success-1",
+  "name": "Create a basic skill definition",
+  "description": "Instructs the agent to generate a barebones skill definition, emphasizing the inclusion of core principles.",
+  "skillName": "skill-authoring",
+  "type": "success",
+  "input": {
+    "prompt": "Create a basic skill definition, including core principles like describing 'what' not 'how' and using natural language. Return the skill definition."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "core principles",
+      "what",
+      "how",
+      "natural language"
+    ],
+    "shouldNotContain": [
+      "error"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "what"
+      },
+      {
+        "type": "contains",
+        "value": "how"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "skill definition"
+    ],
+    "createdAt": "2026-01-17T17:23:47.648Z",
+    "updatedAt": "2026-01-17T17:23:47.650Z"
+  }
+}

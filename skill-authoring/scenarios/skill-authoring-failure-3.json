@@ -1,0 +1,38 @@
+{
+  "id": "skill-authoring-failure-3",
+  "name": "Attempt skill definition with platform-specific patterns",
+  "description": "Instructs the agent to define a skill using platform-specific patterns, expecting a failure result.",
+  "skillName": "skill-authoring",
+  "type": "failure",
+  "input": {
+    "prompt": "Create a skill definition that uses platform specific patterns, such as creating a sandbox with a skill ID. Return the generated skill definition."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "platform-specific",
+      "error"
+    ],
+    "shouldNotContain": [
+      "success"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "error"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "failure",
+      "platform-specific"
+    ],
+    "createdAt": "2026-01-17T17:23:47.648Z",
+    "updatedAt": "2026-01-17T17:23:47.658Z"
+  }
+}

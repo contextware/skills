@@ -1,0 +1,43 @@
+{
+  "id": "skill-authoring-edge-case-4",
+  "name": "Generate a skill definition with file I/O",
+  "description": "Instructs the agent to create a skill definition that involves reading and writing files, and then return the generated skill definition.",
+  "skillName": "skill-authoring",
+  "type": "edge-case",
+  "input": {
+    "prompt": "Create a skill definition that includes reading and writing files, such as reading a JSON file and writing the content to a new file. Return the file handling skill definition."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "file",
+      "read",
+      "write"
+    ],
+    "shouldNotContain": [
+      "error"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "read"
+      },
+      {
+        "type": "contains",
+        "value": "write"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "edge-case",
+      "file I/O"
+    ],
+    "createdAt": "2026-01-17T17:23:47.649Z",
+    "updatedAt": "2026-01-17T17:23:47.661Z"
+  }
+}
