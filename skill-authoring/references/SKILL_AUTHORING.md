@@ -292,6 +292,63 @@ GOOD: "For agents with dynamic MCP support, connect immediately.
 
 ---
 
+## Handling User-Blocking Actions
+
+When a workflow requires user action (like clicking an OAuth link), you **must** instruct agents to:
+
+1. **Present the action ONCE** - Don't retry in a loop
+2. **STOP and WAIT** - Explicitly tell the agent to pause until user confirms
+3. **Request explicit confirmation** - Ask the user to confirm they've completed the action
+
+### The Problem
+
+Without clear guidance, agents will:
+```
+❌ Run auth check → Get "needs_auth" → Present URL → Immediately retry
+   → Get "needs_auth" → Present URL → Retry again → Loop forever
+```
+
+### The Solution
+
+Be explicit in your skill documentation:
+
+```markdown
+✅ GOOD:
+"If authentication is needed:
+1. Present the authentication URL to the user as a clickable link
+2. **STOP EXECUTION** - Do not proceed or retry automatically
+3. Ask the user to confirm when they have completed the OAuth flow
+4. Only after user confirmation, re-run the auth check script"
+```
+
+### Pattern for Authentication Flows
+
+```markdown
+## Handling Authentication Response
+
+**If `status: needs_auth`:**
+
+1. Present the `authUrl` to the user:
+   "Please authenticate by visiting: [authUrl]"
+
+2. **STOP AND WAIT** for user confirmation:
+   - Do NOT automatically retry the auth check
+   - Do NOT poll or loop waiting for authentication
+   - Explicitly ask: "Please let me know when you've completed the authentication"
+
+3. Only when the user confirms they've authenticated:
+   - Re-run the auth check script
+   - If still `needs_auth`, present the new URL and wait again
+```
+
+> [!IMPORTANT]
+> **Never retry user-blocking actions automatically!** OAuth flows, email 
+> confirmations, manual approvals, and similar actions require explicit 
+> user confirmation before retrying. Looping wastes resources and 
+> frustrates users.
+
+---
+
 ## MCP Server Requirements
 
 When your skill depends on MCP servers, document them declaratively:

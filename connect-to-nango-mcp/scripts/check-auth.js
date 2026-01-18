@@ -49,7 +49,7 @@ async function listConnections(integrationId) {
 }
 
 async function createConnectSession(integrationId, userId) {
-    const url = new URL('/connect/session', NANGO_HOST);
+    const url = new URL('/connect/sessions', NANGO_HOST);
 
     const response = await fetch(url.toString(), {
         method: 'POST',

@@ -1,7 +1,7 @@
 ---
 name: skill-authoring
 description: Helps agents author cross-platform, portable skills following best practices
-version: 2.0.1
+version: 2.1.0
 author: context-serve
 mcp-servers: []
 allowed-tools: [get_skill, list_skill_assets, read_skill_asset]
@@ -104,6 +104,7 @@ For agents requiring config file + restart...
 | JSON contracts | "The script outputs JSON with {status, data}" |
 | Declarative MCP | "Requires the 'nango' MCP server (HTTP transport)" |
 | Capability hints | "For agents with dynamic MCP support..." |
+| **User-blocking actions** | "Present the auth URL, then **STOP AND WAIT** for user confirmation" |
 
 ---
 
@@ -135,6 +136,7 @@ The script outputs JSON indicating authentication status.
 - [ ] MCP requirements documented declaratively
 - [ ] Natural language workflow descriptions
 - [ ] Platform Adaptation Notes included (if applicable)
+- [ ] **User-blocking actions have explicit STOP AND WAIT instructions**
 - [ ] Tested on at least one agent platform
 
 ---

@@ -1,7 +1,7 @@
 ---
 name: connect-to-nango-mcp
 description: Connect agents to external platforms (HubSpot, Salesforce, etc.) via Nango OAuth and MCP.
-version: 7.0.0
+version: 7.1.0
 author: context-serve
 mcp-servers: ["nango"]
 tags: [nango, mcp, oauth, integration, hubspot, salesforce, portable]
@@ -100,9 +100,26 @@ The script outputs JSON to stdout with one of three statuses:
   "message": "Please authenticate by visiting the URL above."
 }
 ```
-→ Present the `authUrl` to the user as a clickable link
-→ Wait for user to complete OAuth flow
-→ Re-run the script to get the `connectionId`
+
+> [!CRITICAL]
+> **STOP EXECUTION HERE!** Do not automatically retry or loop.
+
+**Agent instructions for `needs_auth` status:**
+
+1. **Present the `authUrl` ONCE** as a clickable link to the user:
+   > "Please authenticate by visiting this link: [authUrl]"
+
+2. **STOP and explicitly ASK the user to confirm** when they have completed authentication:
+   > "Please let me know when you've completed the OAuth authentication."
+
+3. **DO NOT:**
+   - ❌ Automatically re-run the auth check script
+   - ❌ Poll or loop waiting for authentication to complete
+   - ❌ Present the auth URL multiple times
+
+4. **ONLY after the user confirms** they have authenticated:
+   - Re-run the `check-auth.js` script to get the `connectionId`
+   - If the result is still `needs_auth`, inform the user that authentication wasn't successful and present the new URL once
 
 **If error:**
 ```json
