@@ -389,6 +389,44 @@ This skill requires the **Nango** MCP server.
 - `query`: Execute custom queries
 ```
 
+### OAuth-Protected MCP Servers
+
+Some MCP servers require OAuth authentication before they can be used. When documenting such servers:
+
+1. **Declare the auth requirement** - Note that OAuth is required
+2. **Don't specify the OAuth flow** - The platform handles OAuth discovery
+3. **Document what happens after auth** - What tools become available
+
+**Example for OAuth-Protected Server:**
+
+```markdown
+## MCP Server Requirements
+
+This skill requires the **Incident-Management-v4** MCP server.
+
+> [!IMPORTANT]
+> This server is **OAuth-protected**. When connecting, the platform will:
+> 1. Return a `requires_auth` status with an authorization URL
+> 2. The agent should present this URL to the user
+> 3. After user authorization, retry the connection
+
+**Server Details:**
+- Transport: HTTP
+- URL: Configured in MCP registry
+
+**Authentication:**
+- Type: OAuth 2.0
+- Handled by: Platform (see `mcp-server-oauth` skill for details)
+
+**Available Tools (after authentication):**
+- `createIncident`: Create a new incident
+- `listIncidents`: List existing incidents
+```
+
+**Key Pattern**: Don't prescribe HOW to do OAuth - describe THAT OAuth is required and what the outcome looks like.
+
+For detailed OAuth handling instructions, see the `mcp-server-oauth` skill.
+
 ---
 
 ## Script Guidelines

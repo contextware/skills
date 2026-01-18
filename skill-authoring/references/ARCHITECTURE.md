@@ -123,6 +123,8 @@ The agent code translates abstract skill instructions into platform-specific act
 | "Need env var Y" | Provision from secrets store |
 | "Parse output" | Read stdout, parse JSON |
 | "Handle auth URL" | Present to user via UI |
+| "Connect to MCP server" | Check connectivity, detect OAuth, handle auth flow |
+| "Server requires OAuth" | Extract auth URL, return structured response, wait for user |
 
 ### Example: Vercel Sandbox Adapter
 
@@ -133,6 +135,20 @@ When a skill says "run `check-auth.js hubspot`", the platform:
 3. Credentials are provisioned from environment
 4. Executes with `run_command({ command: "node", args: ["scripts/check-auth.js", "hubspot"] })`
 5. Parses JSON from stdout
+
+### Example: OAuth-Protected MCP Server Connection
+
+When a skill says "connect to the Incident-Management-v4 MCP server", the platform:
+
+1. Attempts to connect to the configured server URL
+2. If the server returns 401/403:
+   - Extracts OAuth URL from `WWW-Authenticate` header, `Link` header, or response body
+   - Returns `{ status: "requires_auth", authUrl: "...", instructions: "..." }`
+3. Agent presents the auth URL to the user and **waits for confirmation**
+4. After user confirms, agent retries connection
+5. On success, returns available tools
+
+This pattern keeps OAuth complexity in the platform while skills remain declarative.
 
 ### Other Possible Adapters
 

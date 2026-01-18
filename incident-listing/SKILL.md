@@ -5,6 +5,11 @@ description: >-
   Management server. Enables agents to list incidents, optionally filter them,
   and present results clearly to users.
 license: Complete terms in LICENSE.txt
+mcp-servers:
+  - Incident-Management-v4
+allowed-tools:
+  - Incident-Management-v4_listIncident
+tags: [incident, tmforum, mcp, oauth]
 ---
 
 # Incident Listing Skill
@@ -13,23 +18,45 @@ This skill enables the agent to retrieve incidents from the Incident Management 
 
 ## MCP Server Requirements
 
-This skill requires the **Incident Management** MCP server to be connected.
+This skill requires the **Incident-Management-v4** MCP server to be connected.
 
-**What it provides:**
-- `listIncident` - Retrieve incidents from the system
-- `createIncident` - Create new incidents (used by the incident-creation skill)
+> [!IMPORTANT]
+> This server is **OAuth-protected**. When you attempt to connect, the platform will:
+> 1. Return a `requires_auth` status with an authorization URL
+> 2. Present this URL to the user and **WAIT** for them to complete authentication
+> 3. After user confirms authentication, retry the connection
 
-**Connection:**
-If your agent doesn't already have this MCP server connected, add it using your platform's MCP configuration method. The server implements the TMF724 Incident Management API.
+**Server Details:**
+- Transport: HTTP
+- URL: Configured in MCP registry
+- API: TMF724 Incident Management API
+
+**Authentication:**
+- Type: OAuth 2.0
+- Flow: Platform-handled (see `mcp-server-oauth` skill for details)
+
+**Available Tools (after authentication):**
+- `Incident-Management-v4_listIncident` - Retrieve incidents from the system
+- `Incident-Management-v4_createIncident` - Create new incidents (used by the create-incident skill)
 
 ---
 
-The MCP server exposes **only two tools**:
+## Workflow
 
-* `listIncident`
-* `createIncident`
+### Phase 1: Connect to MCP Server
 
-This skill focuses exclusively on **listing incidents**.
+1. Use `connect_to_mcp_server` with "Incident-Management-v4" as the server name
+2. **If status is `requires_auth`:**
+   - Present the `authUrl` to the user as a clickable link
+   - Tell the user: "Please click the link to authorize access, then let me know when done."
+   - **STOP AND WAIT** for user confirmation
+   - After user confirms, retry `connect_to_mcp_server`
+3. **If status is `success`:** Proceed to Phase 2
+
+### Phase 2: List Incidents
+
+This skill focuses exclusively on **listing incidents** using the `listIncident` tool.
+
 
 ---
 

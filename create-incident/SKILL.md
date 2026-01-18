@@ -19,11 +19,36 @@ This skill creates a new incident using the Incident Management API. It handles 
 
 This skill requires the **Incident-Management-v4** MCP server.
 
-To connect to this server, use the `connect_to_mcp_server` tool and specify "Incident-Management-v4" as the server name.
+> [!IMPORTANT]
+> This server is **OAuth-protected**. When you attempt to connect, the platform will:
+> 1. Return a `requires_auth` status with an authorization URL
+> 2. Present this URL to the user and **WAIT** for them to complete authentication
+> 3. After user confirms authentication, retry the connection
 
-## Prerequisites
+**Server Details:**
+- Transport: HTTP
+- URL: Configured in MCP registry
 
-*   The agent must be connected to the `Incident-Management-v4` MCP server before using this skill.
+**Authentication:**
+- Type: OAuth 2.0
+- Flow: Platform-handled (see `mcp-server-oauth` skill for details)
+
+**Available Tools (after authentication):**
+- `Incident-Management-v4_createIncident`: Create a new incident
+
+## Workflow
+
+### Phase 1: Connect to MCP Server
+
+1. Use `connect_to_mcp_server` with "Incident-Management-v4" as the server name
+2. **If status is `requires_auth`:**
+   - Present the `authUrl` to the user as a clickable link
+   - Tell the user: "Please click the link to authorize access, then let me know when done."
+   - **STOP AND WAIT** for user confirmation
+   - After user confirms, retry `connect_to_mcp_server`
+3. **If status is `success`:** Proceed to Phase 2
+
+### Phase 2: Create the Incident
 
 ## Step-by-step instructions
 

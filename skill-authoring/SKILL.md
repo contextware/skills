@@ -145,3 +145,4 @@ The script outputs JSON indicating authentication status.
 
 - [SKILL_AUTHORING.md](./references/SKILL_AUTHORING.md) - Full authoring guidelines
 - [ARCHITECTURE.md](./references/ARCHITECTURE.md) - System architecture overview
+- [mcp-server-oauth skill](../mcp-server-oauth/SKILL.md) - OAuth handling for protected MCP servers
