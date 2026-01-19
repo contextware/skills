@@ -15,7 +15,7 @@
  *   authorization-endpoint  The OAuth authorization endpoint URL
  *
  * Options:
- *   --client-id=<id>        OAuth client ID (default: mcp-client)
+ *   --client-id=<id>        OAuth client ID (default: mcp-server)
  *   --redirect-uri=<uri>    Redirect URI for callback (required)
  *   --scope=<scope>         OAuth scopes (space-separated, optional)
  *   --state=<state>         Custom state parameter (auto-generated if not provided)
@@ -27,7 +27,7 @@
  *     "code_verifier": "pkce-code-verifier-for-token-exchange",
  *     "code_challenge": "pkce-code-challenge",
  *     "code_challenge_method": "S256",
- *     "client_id": "mcp-client",
+ *     "client_id": "mcp-server",
  *     "redirect_uri": "https://...",
  *     "scope": "openid profile"
  *   }
@@ -60,7 +60,7 @@ if (!authEndpoint) {
         status: 'error',
         message: 'Usage: node build-auth-url.js <authorization-endpoint> [options]',
         options: {
-            '--client-id': 'OAuth client ID (default: mcp-client)',
+            '--client-id': 'OAuth client ID (default: mcp-server)',
             '--redirect-uri': 'Redirect URI for callback (REQUIRED)',
             '--scope': 'OAuth scopes (space-separated, optional)',
             '--state': 'Custom state parameter (auto-generated if not provided)'
@@ -70,7 +70,7 @@ if (!authEndpoint) {
     process.exit(1);
 }
 
-const clientId = getArg('client-id', 'mcp-client');
+const clientId = getArg('client-id', 'mcp-server');
 const redirectUri = getArg('redirect-uri');
 const scope = getArg('scope');
 const customState = getArg('state');

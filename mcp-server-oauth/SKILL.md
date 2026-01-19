@@ -103,7 +103,7 @@ When using the `connect_to_mcp_server` tool, the platform returns one of three s
     "authorizationEndpoint": "https://auth.example.com/authorize",
     "tokenEndpoint": "https://auth.example.com/token",
     "issuer": "https://auth.example.com",
-    "suggestedClientId": "mcp-client",
+    "suggestedClientId": "mcp-server",
     "suggestedRedirectUri": "http://localhost:3000/api/mcp/oauth/callback",
     "suggestedScope": "openid profile",
     "scopes": ["openid", "profile"],
@@ -115,7 +115,7 @@ When using the `connect_to_mcp_server` tool, the platform returns one of three s
 **Action:** OAuth discovered but needs user confirmation of configuration. See Workflow below.
 
 **Fields:**
-- `oauthDiscovery.suggestedClientId`: **SUGGESTED** OAuth client ID (default: "mcp-client") - user can override with their own
+- `oauthDiscovery.suggestedClientId`: **SUGGESTED** OAuth client ID (default: "mcp-server") - user can override with their own
 - `oauthDiscovery.suggestedRedirectUri`: **SUGGESTED** callback URL for your platform - user can override if needed
 - `oauthDiscovery.suggestedScope`: **SUGGESTED** OAuth scope string (may be empty) - user can override or use "" for no scopes
 - `oauthDiscovery.scopes`: **SUGGESTED** OAuth scopes as array (for reference) - user can override or use empty string "" for no scopes
@@ -516,7 +516,7 @@ The following section documents the response format used by platforms with built
    → Returns: {
        status: "requires_oauth_config",
        oauthDiscovery: {
-         suggestedClientId: "mcp-client",
+         suggestedClientId: "mcp-server",
          suggestedRedirectUri: "http://localhost:3000/api/mcp/oauth/callback",
          scopes: ["mcp:read", "mcp:write"],
          authorizationEndpoint: "https://auth.example.com/authorize"
@@ -525,7 +525,7 @@ The following section documents the response format used by platforms with built
 
 2. Present config to user:
    "OAuth discovered! Use:
-    - clientId: 'mcp-client'
+    - clientId: 'mcp-server'
     - redirectUri: 'http://localhost:3000/api/mcp/oauth/callback'
     - scope: 'mcp:read mcp:write' (or empty for no scopes)?"
 
@@ -533,7 +533,7 @@ The following section documents the response format used by platforms with built
 
 4. connect_to_mcp_server({
      serverName: "incident-manager",
-     clientId: "mcp-client",
+     clientId: "mcp-server",
      redirectUri: "http://localhost:3000/api/mcp/oauth/callback",
      scope: "",
      clientSecret: "optional-secret-for-confidential-clients"
