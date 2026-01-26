@@ -1,68 +1,52 @@
 ---
 name: hubspot-whoami-nango
-description: Find out whoami in HubSpot using Nango
-metadata:
-  createdAt: '2026-01-05T19:32:39.918Z'
-allowed-tools:
-  - call_nango_mcp_tool
-  - create_sandbox
-  - run_command
-  - get_skill
-  - list_skill_assets
-  - read_skill_asset
-mcp-servers:
-  - nango
-depends-on:
-  - nango-mcp
+description: Find out who you are in HubSpot using Nango.
+version: 2.0.0
+author: agent-skills-workbench
+mcp-servers: ["nango"]
+depends-on: ["connect-to-nango-mcp"]
+tags: [hubspot, nango, identity, portable]
 ---
+
 # HubSpot WhoAmI via Nango
 
-This skill allows an agent to identify the current HubSpot user using the Nango integration.
+This skill identifies the current authenticated HubSpot user using the Nango integration.
 
-## Overview
+## MCP Server Requirements
 
-The skill leverages the Nango MCP server to authenticate with HubSpot and then calls the `whoami` tool to retrieve the user's information.
+This skill depends on the **Nango** MCP server being correctly configured and connected.
 
-## Prerequisites
+**Required Tool:**
+- `whoami`: Returns the authenticated HubSpot user's ID and email address.
 
-*   A Nango account configured with HubSpot integration.
-*   The `nango-mcp` skill must be available to handle authentication.
-*   The agent must have access to the `NANGO_SECRET_KEY` environment variable.
+**Connection Requirements:**
+See the `connect-to-nango-mcp` skill for details on how to configure the Nango MCP server with the necessary authentication headers.
 
-## Steps
+---
 
-1.  **Ask the user** if they want to find out who they are in HubSpot.
-2.  **Authenticate with HubSpot via Nango:**
-    *   Use the `nango-mcp` skill to obtain a `connectionId` for the HubSpot integration. If a `connectionId` is not already available, follow the instructions in the `nango-mcp` skill to authenticate.
-    *   Ensure the user selects "hubspot" as the provider.
-    *   The `nango-mcp` skill will handle the OAuth flow if needed.
-3.  **Call the `whoami` tool:**
-    *   Use the `call_nango_mcp_tool` to execute the `whoami` tool on the Nango MCP server.
-    *   Set the `providerConfigKey` to "hubspot".
-    *   Set the `connectionId` to the value obtained from the `nango-mcp` skill.
-4.  **Present the user information:**
-    *   The `whoami` tool returns a JSON object containing the user's ID and email address.
-    *   Display this information to the user.
+## Workflow
+
+### Step 1: Ensure Nango is Connected
+Verify if the Nango MCP server is connected and the `whoami` tool is available. If not, follow the `connect-to-nango-mcp` skill workflow to establish a connection for the `hubspot` provider.
+
+### Step 2: Call the whoami Tool
+Execute the `whoami` tool provided by the Nango MCP server. This tool requires no arguments if the connection headers were correctly set during MCP initialization.
+
+### Step 3: Present the Identity
+Display the returned user information (ID and email) to the user in a friendly format.
+
+---
 
 ## Example Output
 
-```json
-{
-  "id": 3768092,
-  "email": "ivobrett@iname.com"
-}
+```text
+HubSpot Identity:
+- User ID: 3768092
+- Email: ivobrett@iname.com
 ```
 
 ## Error Handling
 
-*   If the Nango authentication fails, refer to the `nango-mcp` skill for troubleshooting steps.
-*   If the `whoami` tool returns an error, display the error message to the user.
-*   If the `NANGO_SECRET_KEY` environment variable is not set, inform the user that the Nango integration cannot be used.
-
-## Allowed Tools
-
-*   call_nango_mcp_tool
-
-## MCP Servers
-
-*   nango
+- **Tool Not Found**: Ensure the Nango MCP server is connected and the provider is `hubspot`.
+- **Authentication Error**: Refer to the troubleshooting section of the `connect-to-nango-mcp` skill.
+- **Provider Mismatch**: Ensure you are using the `hubspot` provider config key when connecting to Nango.

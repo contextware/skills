@@ -1,0 +1,39 @@
+{
+  "id": "open-memory-local-manager-edge-case-2",
+  "name": "List memories when none exist",
+  "description": "Lists memories using the open-memory-local_openmemory_list tool via the open-memory-local MCP server when no memories have been stored yet. Should return an empty list or a message indicating no memories exist.",
+  "skillName": "open-memory-local-manager",
+  "type": "edge-case",
+  "input": {
+    "prompt": "Using the open-memory-local MCP server, list all memories. Report if any memories exist."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "no memories",
+      "empty"
+    ],
+    "shouldNotContain": [
+      "error",
+      "failed"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "no memories"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "edge-case",
+      "list",
+      "empty"
+    ],
+    "createdAt": "2026-01-22T14:00:42.419Z"
+  }
+}

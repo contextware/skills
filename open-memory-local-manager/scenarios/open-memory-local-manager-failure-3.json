@@ -1,0 +1,38 @@
+{
+  "id": "open-memory-local-manager-failure-3",
+  "name": "Attempt to store an empty memory",
+  "description": "Attempts to store an empty memory string using the open-memory-local_openmemory_store tool via the open-memory-local MCP server. Expects an error message.",
+  "skillName": "open-memory-local-manager",
+  "type": "failure",
+  "input": {
+    "prompt": "Using the open-memory-local MCP server, attempt to store an empty memory string. Report any errors."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "error",
+      "empty"
+    ],
+    "shouldNotContain": [
+      "success"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "error"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "failure",
+      "store",
+      "error-handling"
+    ],
+    "createdAt": "2026-01-22T14:00:42.419Z"
+  }
+}

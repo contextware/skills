@@ -1,6 +1,12 @@
 /**
  * Nango Authentication Check Script
  *
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * CRITICAL: ZERO EXTERNAL DEPENDENCIES. DO NOT ADD REQUIRE or NPM INSTALL.
+ * This script uses built-in 'fetch' in Node 18+. It is designed to run in 
+ * restricted sandboxes without internet access to npm registries.
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ *
  * This script checks if a user is authenticated with Nango and returns
  * either the connectionId (if authenticated) or an authUrl (if not).
  *
@@ -21,10 +27,12 @@
  *   { "status": "error", "message": "..." }
  */
 
-const NANGO_SECRET_KEY = process.env.NANGO_SECRET_KEY;
 const NANGO_HOST = process.env.NANGO_HOST || 'https://api.nango.dev';
 const USER_ID = process.env.NANGO_DEFAULT_USER_ID || 'default-user';
 const INTEGRATION_ID = process.argv[2] || 'hubspot';
+
+// NANGO_SECRET_KEY can be passed via env var or as the 2nd command-line argument
+const NANGO_SECRET_KEY = process.env.NANGO_SECRET_KEY || process.argv[3];
 
 async function listConnections(integrationId) {
     const url = new URL('/connection', NANGO_HOST);
@@ -49,7 +57,7 @@ async function listConnections(integrationId) {
 }
 
 async function createConnectSession(integrationId, userId) {
-    const url = new URL('/connect/session', NANGO_HOST);
+    const url = new URL('/connect/sessions', NANGO_HOST);
 
     const response = await fetch(url.toString(), {
         method: 'POST',

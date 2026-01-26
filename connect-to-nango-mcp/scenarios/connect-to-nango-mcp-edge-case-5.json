@@ -1,0 +1,46 @@
+{
+  "id": "connect-to-nango-mcp-edge-case-5",
+  "name": "Re-authentication flow",
+  "description": "Simulates re-authentication by first succeeding with whoami, then calls check-auth script to initiate the OAuth flow. Report the Auth URL.",
+  "skillName": "connect-to-nango-mcp",
+  "type": "edge-case",
+  "input": {
+    "prompt": "First, call the HubSpot whoami tool via the nango MCP server and report the user's email. Then, execute the check-auth script for the hubspot provider and return the authentication URL. Do not follow or visit the Auth URL."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "@",
+      "authUrl",
+      "https://connect.nango.dev"
+    ],
+    "shouldNotContain": [
+      "error",
+      "failed"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "@"
+      },
+      {
+        "type": "contains",
+        "value": "authUrl"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "hard",
+    "tags": [
+      "edge-case",
+      "hubspot",
+      "nango",
+      "re-authentication"
+    ],
+    "createdAt": "2026-01-06T21:39:23.961Z",
+    "updatedAt": "2026-01-06T21:39:23.966Z"
+  }
+}

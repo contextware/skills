@@ -1,0 +1,43 @@
+{
+  "id": "skill-authoring-success-5",
+  "name": "Create a skill definition that uses scripts",
+  "description": "Asks the agent to author a skill that executes an external script, emphasizing the inclusion of script output format description.",
+  "skillName": "skill-authoring",
+  "type": "success",
+  "input": {
+    "prompt": "Create a skill definition that runs a bundled script and outputs JSON. Return the skill definition, including how the script output is formatted."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "script",
+      "JSON",
+      "output"
+    ],
+    "shouldNotContain": [
+      "error"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "script"
+      },
+      {
+        "type": "contains",
+        "value": "JSON"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "script execution"
+    ],
+    "createdAt": "2026-01-17T17:23:47.649Z",
+    "updatedAt": "2026-01-17T17:23:47.664Z"
+  }
+}
