@@ -25,8 +25,10 @@ Determine which header name the server expects for its API key. Common names inc
 - `Authorization` (typically used as `Bearer <token>`)
 - `api-key`
 
-### Step 2: Obtain the Key
-Ask the user for the value of the required key. If it's a Bearer token, the user provides the token, and you should ensure the "Bearer " prefix is included in the final header value if required by the server.
+### Step 2: Proactively Obtain the Key
+Before asking the user, check the environment for any existing credentials or identifiers. If a required value is available in the environment, use it immediately. Search for common variable names or related configuration.
+
+If the key is NOT found in the environment, ask the user for the value. If it's a Bearer token, the user provides the token, and you should ensure the "Bearer " prefix is included in the final header value if required by the server.
 
 ### Step 3: Store and Configure
 Store the API key/header mapping in your agent's credential store. Once stored, configure the MCP connection to include this header in its requests.

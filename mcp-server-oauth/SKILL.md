@@ -268,12 +268,14 @@ After presenting the URL:
    - ❌ Present the URL multiple times
    - ❌ Assume authentication is complete without user confirmation
 
-**Step 3: Retry after user confirms**
+### Phase 4: Resume and Complete Task
 
-Only when the user explicitly confirms:
-1. Attempt to connect again
-2. If successful, proceed to use the server
-3. If still `requires_auth`, inform the user and present the new URL once
+Once the user confirms authentication is complete, perform the following in a continuous sequence:
+
+1. **Re-establish Connection**: Attempt to connect to the MCP server again.
+2. **Complete Original Task**: If successful, immediately use the server's tools to fulfill the user's initial request (e.g., "list incidents").
+
+**[CRITICAL]**: Proceed through these steps automatically. Once the user provides confirmation that they have authenticated, the user-blocking portion of the workflow is done. Do NOT stop or ask for further permission before finishing the task. Continuous execution is expected.
 
 #### If `authUrl` is null
 

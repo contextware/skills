@@ -50,23 +50,49 @@ First, determine if the Nango MCP server is already connected. If Nango-specific
 ### Phase 2: Handle Authentication
 If tools are not available, you must obtain a `connectionId`.
 
-1. **Ask the user** which provider they want to connect to (e.g., `hubspot`, `salesforce`).
-2. **Run the authentication script**: Execute `scripts/check-auth.js` passing the provider and secret key.
+1. **Identify Provider**: Determine which provider the user wants to connect to (e.g., `hubspot`, `salesforce`) by checking the original request or current skill context. Only ask the user if the provider is not mentioned and cannot be inferred.
+2. **Get Secret Key**: Attempt to retrieve the `NANGO_SECRET_KEY` from the environment variables (e.g., via platform tools or direct environment access). Do NOT ask the user for this key if it is already available.
+3. **Run the authentication script**: Execute `scripts/check-auth.js` passing the inferred provider and the retrieved secret key.
    ```bash
    node scripts/check-auth.js <provider> <secret_key>
    ```
-3. **Handle Response**:
-   - **Success**: The script returns a `connectionId`. Proceed to configure the MCP server.
+4. **Handle Response**:
+   - **Success**: The script returns a `connectionId`. Proceed immediately to configure the MCP server.
    - **Needs Auth**: The script returns an `authUrl`. Present this URL to the user and wait for them to confirm completion. Once confirmed, re-run the script to get the `connectionId`.
    - **Error**: Report the error to the user.
 
-### Phase 3: Configure MCP Server
-Once you have the `connectionId`, configure your MCP client to connect to `https://api.nango.dev/mcp` using the required headers:
-- `Authorization`: `Bearer <NANGO_SECRET_KEY>`
-- `connection-id`: `<connectionId>`
-- `provider-config-key`: `<provider>`
+### Phase 3: Configure and Use MCP Server
+Once you have the `connectionId`, **IMMEDIATELY PROCEED** with the following steps without pausing:
 
-After the connection is established, the provider-specific tools will become available.
+**Step 3.1 - Provision Authentication Headers:**
+Configure the Nango MCP server with these three required headers (use your platform's credential storage mechanism):
+- **Server identifier**: `nango-mcp-server` (or similar)
+- **Server URL**: `https://api.nango.dev/mcp`
+- **Headers to configure** (provision all three):
+  1. `Authorization`: `Bearer <NANGO_SECRET_KEY>`
+  2. `connection-id`: `<connectionId>` (from Phase 2)
+  3. `provider-config-key`: `<provider>` (e.g., "hubspot", "salesforce")
+
+*Platform-specific notes:*
+- Some platforms may require separate calls to provision each header
+- Others may accept all headers in a single configuration call
+- Use whatever credential/header provisioning tool your platform provides
+
+**Step 3.2 - Connect to MCP Server:**
+Establish connection to the Nango MCP server. The server will validate your headers and return available tools based on the provider.
+
+**Step 3.3 - List Available Tools:**
+Query the MCP server to discover which tools are now available (e.g., `whoami`, `list_contacts`, `query`, etc.). This confirms authentication succeeded.
+
+**Step 3.4 - Execute User's Request:**
+Use the appropriate tool(s) to fulfill the user's original request immediately.
+
+**[CRITICAL - DO NOT STOP]**:
+- Execute steps 3.1 through 3.4 **in sequence without pausing**
+- Do NOT ask for permission between steps
+- Do NOT report "I've configured the headers" and stop
+- The user should see the final result (e.g., the HubSpot data), not intermediate status messages
+- If authentication fails, report the error with details
 
 ---
 
