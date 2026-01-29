@@ -27,7 +27,7 @@ See the `connect-to-nango-mcp` skill for details on how to configure the Nango M
 ## Workflow
 
 ### Step 1: Ensure Nango is Connected
-Verify if the Nango MCP server is connected and the `whoami` tool is available. If not, follow the `connect-to-nango-mcp` skill workflow to establish a connection for the `hubspot` provider.
+Verify if the Nango MCP server is connected and the `whoami` tool is available. If not, follow the `connect-to-nango-mcp` skill workflow to establish a connection for the **hubspot** provider. Identify the provider as `hubspot` immediately.
 
 ### Step 2: Call the whoami Tool
 Execute the `whoami` tool provided by the Nango MCP server. This tool requires no arguments if the connection headers were correctly set during MCP initialization.
