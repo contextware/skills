@@ -81,6 +81,8 @@ Configure the Nango MCP server with these three required headers (use your platf
 **Step 3.2 - Connect to MCP Server:**
 Establish connection to the Nango MCP server. The server will validate your headers and return available tools based on the provider.
 
+*For agents that support programmatic MCP connections:* Use the reference script `scripts/connect-direct.js` which demonstrates the connection pattern using the MCP SDK. See the "scripts/connect-direct.js" section below for details.
+
 **Step 3.3 - List Available Tools:**
 Query the MCP server to discover which tools are now available (e.g., `whoami`, `list_contacts`, `query`, etc.). This confirms authentication succeeded.
 
@@ -108,6 +110,41 @@ Checks Nango authentication status and initiates the authentication flow if need
 
 ### scripts/config-helper.js
 Utility to help generate configuration snippets for various agent platforms.
+
+### scripts/connect-direct.js
+Reference script showing how to programmatically connect to the Nango MCP server in a one-off manner.
+
+**When to Use:**
+- For agents that support creating MCP client connections programmatically using the MCP SDK
+- When you need a direct connection without configuration file setup
+- As a reference implementation for custom agent integrations
+- When the agent doesn't know how to add MCP servers on the fly via configuration
+
+**Requirements:**
+- `@modelcontextprotocol/sdk` package installed
+- Node.js 18+
+- Environment variables from authentication step
+
+**Usage:**
+```bash
+# Set required environment variables
+export NANGO_SECRET_KEY="your-secret-key"
+export CONNECTION_ID="connection-id-from-check-auth"
+export INTEGRATION_ID="hubspot"  # or other provider
+
+# Run the script
+node connect-direct.js
+```
+
+**Environment Variables:**
+- `NANGO_SECRET_KEY` or `NANGO_SECRET_KEY_DEV` (required): Your Nango secret key
+- `CONNECTION_ID` (required): The connection ID from OAuth (obtain via `check-auth.js`)
+- `INTEGRATION_ID` or `PROVIDER_CONFIG_KEY` (required): Provider name (e.g., 'hubspot', 'salesforce')
+- `NANGO_MCP_URL` (optional): MCP server URL (defaults to 'https://api.nango.dev/mcp')
+
+**Output:** JSON to stdout with connection status and available tools
+
+**Note:** This is a reference implementation using ES modules. Agents should adapt this pattern to their specific runtime environment and requirements. The script demonstrates the core connection pattern that can be integrated into agent workflows.
 
 ---
 
