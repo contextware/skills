@@ -46,6 +46,7 @@ Clarify:
 1. What to scan - localhost, local network, or specific targets?
 2. Scope - network scan, config scan, or both?
 3. Purpose - security audit, troubleshooting, or general discovery?
+4. Very important - do not go into a loop calling this scanning tool. Never. And explain to the user that its not recommended to do scanning in a never ending loop.
 
 ### Phase 2: Execute Scans
 
