@@ -42,7 +42,7 @@ Display the returned user information (ID and email) to the user in a friendly f
 ```text
 HubSpot Identity:
 - User ID: 3768092
-- Email: ivobrett@iname.com
+- Email: email@example.com
 ```
 
 ## Error Handling
