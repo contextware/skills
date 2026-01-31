@@ -81,7 +81,177 @@ Configure the Nango MCP server with these three required headers (use your platf
 **Step 3.2 - Connect to MCP Server:**
 Establish connection to the Nango MCP server. The server will validate your headers and return available tools based on the provider.
 
-*For agents that support programmatic MCP connections:* Use the reference script `scripts/connect-direct.js` which demonstrates the connection pattern using the MCP SDK. See the "scripts/connect-direct.js" section below for details.
+*For agents that support programmatic MCP connections and use the MCP SDK:* Use the reference script `scripts/connect-direct.js` which demonstrates the connection pattern using the MCP SDK. See the "scripts/connect-direct.js" section below for details.
+
+*For agents that suppport programmatic MCP connections but do not use the MCP SDK: They can use the following pattern:*
+
+Regardless of vendor, an MCP HTTP server will:
+
+Accept POST requests with JSON-RPC 2.0
+
+Stream responses as text/event-stream
+
+Support standard MCP methods:
+
+initialize (sometimes implicit)
+tools/list
+tools/call
+resources/list (optional)
+prompts/list (optional)
+
+That’s all we rely on.
+
+1️⃣ Open a generic MCP stream
+
+This is the universal way to connect.
+
+```bash
+curl -N http://MCP_SERVER_URL \
+  -H "Accept: text/event-stream" \
+  -H "Content-Type: application/json"
+```
+
+If the server is alive, you’ll usually see something like:
+
+event: ready
+data: {"jsonrpc":"2.0","method":"server/ready"}
+
+(Some servers skip ready; that’s okay.)
+
+2️⃣ (Optional) Initialize the client
+
+Some MCP servers expect an explicit initialize.
+
+```bash
+curl -N http://MCP_SERVER_URL \
+  -H "Accept: text/event-stream" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": "init-1",
+    "method": "initialize",
+    "params": {
+      "clientInfo": {
+        "name": "curl-mcp-client",
+        "version": "0.1"
+      }
+    }
+  }'
+```
+
+Typical response:
+
+```json
+{
+  "jsonrpc":"2.0",
+  "id":"init-1",
+  "result":{
+    "capabilities":{
+      "tools":true
+    }
+  }
+}
+```
+
+3️⃣ List tools (universally supported)
+```bash
+curl -N http://MCP_SERVER_URL \
+  -H "Accept: text/event-stream" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": "tools-1",
+    "method": "tools/list"
+  }'
+```
+
+Response:
+```json
+{
+  "jsonrpc":"2.0",
+  "id":"tools-1",
+  "result":{
+    "tools":[
+      {
+        "name":"example.search",
+        "description":"Search something",
+        "inputSchema":{...}
+      }
+    ]
+  }
+}
+```
+4️⃣ Call a tool (generic invocation)
+```bash
+curl -N http://MCP_SERVER_URL \
+  -H "Accept: text/event-stream" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": "call-1",
+    "method": "tools/call",
+    "params": {
+      "name": "example.search",
+      "arguments": {
+        "query": "hello world"
+      }
+    }
+  }'
+```
+
+Streamed result:
+```json
+{
+  "jsonrpc":"2.0",
+  "id":"call-1",
+  "result":{
+    "content":[
+      { "type":"text", "text":"Result here" }
+    ]
+  }
+}
+```
+5️⃣ Handling streaming correctly (important)
+
+MCP servers may emit:
+partial messages
+multiple content chunks
+a final done event
+
+Always:
+curl -N
+
+And treat each data: line as incremental.
+
+6️⃣ Minimal MCP client mental model
+
+You only need to implement:
+
+POST JSON-RPC
+↓
+Read SSE lines
+↓
+Parse JSON
+↓
+Match `id`
+↓
+Handle result/error
+
+7️⃣ One-liner MCP request template
+
+Save this mentally:
+```bash
+curl -N MCP_URL \
+  -H "Accept: text/event-stream" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc":"2.0",
+    "id":"X",
+    "method":"METHOD",
+    "params":{...}
+  }'
+```
+If a server requires auth, headers are just decoration on top of this.
 
 **Step 3.3 - List Available Tools:**
 Query the MCP server to discover which tools are now available (e.g., `whoami`, `list_contacts`, `query`, etc.). This confirms authentication succeeded.
