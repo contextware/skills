@@ -533,7 +533,7 @@ The following section documents the response format used by platforms with built
    "OAuth discovered! Use:
     - clientId: 'mcp-server'
     - redirectUri: 'http://localhost:3000/api/mcp/oauth/callback'
-    - scope: 'mcp:read mcp:write' (or empty for no scopes)?"
+    - scope: 'mcp:tools openid email' (or empty for no scopes)?"
 
 3. User confirms (or provides custom values, e.g., scope: "" for no scopes, clientSecret: "..." for confidential clients)
 
@@ -596,13 +596,23 @@ The following section documents the response format used by platforms with built
 
 **"OAuth completed but still can't connect"**
 → The OAuth token may not have been captured correctly
-→ Try the OAuth flow again with a fresh connection attempt
+→ Try clearing the authentication data and starting fresh (see below)
 → Check that the platform's callback URL is correctly configured
+
+**"Stale or invalid authentication tokens"**
+→ If authentication keeps failing even after completing the OAuth flow, the stored tokens may be stale or corrupted
+→ **Solution: Clear all authentication data for the specific MCP server:**
+  - Use the `clear_mcp_auth` tool: Call `clear_mcp_auth({"serverName": "your-server-name"})` to clear OAuth tokens, API keys, and server configuration
+  - Alternatively, on platforms with the clear-auth API: Make a POST request to `/api/mcp/clear-auth` with `{"serverName": "your-server-name"}`
+  - This clears authentication data for the specified server only
+  - After clearing, retry the OAuth flow from the beginning with `connect_to_mcp_server`
+→ **Important**: This only clears auth data for the specific server you specify - other MCP servers are unaffected
 
 **"User authenticated but connection still fails"**
 → The authentication scope may be insufficient
 → Check if the server requires specific OAuth scopes
 → Some servers require additional headers beyond the Bearer token
+→ Try clearing authentication data (see above) and re-authenticating with the correct scopes
 
 **"authType is 'unknown'"**
 → The server returned 401/403 but no WWW-Authenticate header with OAuth metadata
@@ -620,7 +630,7 @@ The following section documents the response format used by platforms with built
 → The platform automatically clears the invalid token
 → You'll receive a new `requires_oauth_config` response with the server-required scope
 → Show the user the **new required scope** and ask them to re-authenticate with it
-→ Example: User authenticated with `scope: "mcp:tools"` but server requires `scope: "mcp:read mcp:write"`
+→ Example: User authenticated with `scope: "mcp:tools"` but server also requires `scope: "email openid"`
 
 **Competing Listener Problem**
 
