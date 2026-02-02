@@ -1,20 +1,20 @@
 {
   "id": "incident-listing-success-2",
   "name": "List incidents with a specific state",
-  "description": "Retrieves incidents that match a specified state (e.g., 'raised') from the Incident Management API.",
+  "description": "Retrieve incidents with a 'raised' state using the Incident Management MCP server and summarize the results.",
   "skillName": "incident-listing",
   "type": "success",
   "input": {
-    "prompt": "Using the Incident Management MCP server, list all incidents that are in the 'raised' state and include the incident ID and priority in your response."
+    "prompt": "Using the Incident-Management-v4 MCP server, list all incidents with the state 'raised', and summarize the Incident ID, State, and Priority for each incident."
   },
   "expectedOutput": {
     "shouldContain": [
-      "incident",
-      "raised",
-      "priority"
+      "Incident",
+      "raised"
     ],
     "shouldNotContain": [
       "error",
+      "cleared",
       "failed"
     ]
   },
@@ -32,10 +32,10 @@
     "difficulty": "medium",
     "tags": [
       "success",
-      "incident listing",
-      "state filter"
+      "incident-listing",
+      "state"
     ],
-    "createdAt": "2026-01-07T20:58:21.171Z",
-    "updatedAt": "2026-01-07T20:58:21.173Z"
+    "createdAt": "2026-02-01T11:33:47.441Z",
+    "updatedAt": "2026-02-01T11:33:47.443Z"
   }
 }

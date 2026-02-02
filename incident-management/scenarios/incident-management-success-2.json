@@ -1,0 +1,41 @@
+{
+  "id": "incident-management-success-2",
+  "name": "List all existing incidents",
+  "description": "Verify agent can retrieve a list of incidents from the Incident Management MCP server",
+  "skillName": "incident-management",
+  "type": "success",
+  "input": {
+    "prompt": "Connect to the Incident Management MCP server and list all incidents. Return the list showing all available incidents."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "incident"
+    ],
+    "shouldNotContain": [
+      "error",
+      "failed"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "Incident-Management-v4_listIncident"
+    ],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "incident"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "list",
+      "incident-management"
+    ],
+    "createdAt": "2026-02-01T21:14:35.790Z",
+    "updatedAt": "2026-02-01T21:14:35.796Z"
+  }
+}

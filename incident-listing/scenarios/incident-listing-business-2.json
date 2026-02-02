@@ -1,0 +1,62 @@
+{
+  "id": "incident-listing-business-2",
+  "name": "Investigate Customer Complaints in Galway",
+  "description": "NOC engineer investigates a cluster of customer complaints in Galway to understand the scope and impact.",
+  "skillName": "incident-listing",
+  "type": "business",
+  "input": {
+    "prompt": "I'm seeing a high number of customer complaints reported in Galway. List any related incidents in the same region."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "Galway",
+      "customer complaints",
+      "INC002-HIGH-20260131"
+    ],
+    "shouldNotContain": [
+      "error",
+      "failed"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "incident"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "business",
+      "incident",
+      "noc",
+      "customer complaints"
+    ],
+    "createdAt": "2026-02-01T11:34:34.116Z",
+    "updatedAt": "2026-02-01T11:34:34.118Z"
+  },
+  "testdata": {
+    "mockServer": "tmf724",
+    "setup": [
+      {
+        "collection": "incident",
+        "file": "scenario2-customer-complaints.json",
+        "clearBefore": true
+      }
+    ],
+    "teardown": "keep",
+    "assertions": [
+      {
+        "collection": "incident",
+        "query": {
+          "domain": "RAN"
+        },
+        "expectedCount": 1
+      }
+    ]
+  }
+}

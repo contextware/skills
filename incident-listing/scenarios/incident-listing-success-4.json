@@ -1,19 +1,25 @@
 {
   "id": "incident-listing-success-4",
-  "name": "List incidents with a specific category",
-  "description": "Retrieves incidents that match a specified category (e.g., 'Network') from the Incident Management API.",
+  "name": "List incidents with specific priority and state",
+  "description": "Test listing incidents with both priority and state filters.",
   "skillName": "incident-listing",
   "type": "success",
   "input": {
-    "prompt": "Using the Incident Management MCP server, list all incidents with category 'Network'. Summarize the incident including the name and the current state."
+    "prompt": "Using the Incident-Management-v4 MCP server, list incidents that are 'critical' priority and in 'raised' state. Summarize the Incident ID, State, and Priority."
   },
   "expectedOutput": {
     "shouldContain": [
-      "Network",
-      "incident"
+      "Incident",
+      "critical",
+      "raised"
     ],
     "shouldNotContain": [
-      "error"
+      "error",
+      "cleared",
+      "high",
+      "medium",
+      "low",
+      "failed"
     ]
   },
   "evaluationCriteria": {
@@ -22,15 +28,11 @@
     "responseChecks": [
       {
         "type": "contains",
-        "value": "Network"
+        "value": "critical"
       },
       {
         "type": "contains",
-        "value": "incident"
-      },
-      {
-        "type": "not-contains",
-        "value": "error"
+        "value": "raised"
       }
     ]
   },
@@ -38,10 +40,11 @@
     "difficulty": "medium",
     "tags": [
       "success",
-      "incident listing",
-      "category filter"
+      "incident-listing",
+      "priority",
+      "state"
     ],
-    "createdAt": "2026-01-07T20:58:21.171Z",
-    "updatedAt": "2026-01-07T21:14:34.454Z"
+    "createdAt": "2026-02-01T11:33:47.441Z",
+    "updatedAt": "2026-02-01T11:33:47.445Z"
   }
 }

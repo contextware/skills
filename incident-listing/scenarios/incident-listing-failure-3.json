@@ -1,0 +1,41 @@
+{
+  "id": "incident-listing-failure-3",
+  "name": "Handle connection error to Incident Management MCP",
+  "description": "Test the scenario when the connection to the Incident Management MCP server fails.",
+  "skillName": "incident-listing",
+  "type": "failure",
+  "input": {
+    "prompt": "Attempt to list incidents using the Incident-Management-v4 MCP server, but simulate a connection failure. Report the error."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "error",
+      "connection",
+      "failed"
+    ],
+    "shouldNotContain": [
+      "Incident",
+      "success"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "error"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "failure",
+      "connection",
+      "error-handling"
+    ],
+    "createdAt": "2026-02-01T11:33:47.441Z",
+    "updatedAt": "2026-02-01T11:33:47.444Z"
+  }
+}

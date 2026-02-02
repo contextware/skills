@@ -1,0 +1,48 @@
+{
+  "id": "incident-management-success-1",
+  "name": "Create a new incident successfully",
+  "description": "Verify agent can create an incident with all required fields using the Incident Management MCP server",
+  "skillName": "incident-management",
+  "type": "success",
+  "input": {
+    "prompt": "Create a new incident with the name 'Server Outage', category 'Infrastructure', priority 'critical', state 'raised', ackState 'unacknowledged', occurrence time '2024-01-15T08:00:00Z', domain 'production', and source object ID 'server-001'. Return the created incident details including the incident ID."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "incident",
+      "id",
+      "Server Outage"
+    ],
+    "shouldNotContain": [
+      "error",
+      "failed",
+      "unable"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "Incident-Management-v4_createIncident"
+    ],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "incident"
+      },
+      {
+        "type": "contains",
+        "value": "id"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "create",
+      "incident-management"
+    ],
+    "createdAt": "2026-02-01T21:14:35.790Z",
+    "updatedAt": "2026-02-01T21:14:35.795Z"
+  }
+}
