@@ -1,7 +1,7 @@
 ---
-name: nlweb-company-data-query
+name: knowledge-management
 description: >-
-  This skill allows you to ask questions about company data using natural
+  This skill allows you to ask questions about internal company data using natural
   language. Use it to find information about employees, projects, or other
   internal knowledge.
 metadata:
@@ -11,9 +11,9 @@ allowed-tools:
 mcp-servers:
   - nlweb-mcp
 ---
-# NLWeb Company Data Query Skill
+# Knowledge Management Skill
 
-This skill enables you to query company data using the NLWeb MCP server.
+This skill enables you to query internal proprietary company data using the NLWeb MCP server.
 
 ## MCP Server Requirements
 
