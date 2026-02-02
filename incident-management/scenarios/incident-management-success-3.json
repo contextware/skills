@@ -1,0 +1,59 @@
+{
+  "id": "incident-management-success-3",
+  "name": "Retrieve a specific incident by ID",
+  "description": "Verify agent can retrieve detailed information for a specific incident",
+  "skillName": "incident-management",
+  "type": "success",
+  "input": {
+    "prompt": "Retrieve the details of an incident using the Incident Management MCP server. List all incidents to find an id and then use v4_retrieveIncident to return the available information for that particular incident. Return all available information about the incident including its name, priority, state, and occurrence time."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "incident",
+      "priority",
+      "state"
+    ],
+    "shouldNotContain": [
+      "error",
+      "failed"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "Incident-Management-v4_retrieveIncident"
+    ],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "incident"
+      },
+      {
+        "type": "contains",
+        "value": "priority"
+      },
+      {
+        "type": "contains",
+        "value": "state"
+      },
+      {
+        "type": "not-contains",
+        "value": "error"
+      },
+      {
+        "type": "not-contains",
+        "value": "failed"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "retrieve",
+      "incident-management"
+    ],
+    "createdAt": "2026-02-01T21:14:35.790Z",
+    "updatedAt": "2026-02-02T07:56:21.141Z"
+  }
+}

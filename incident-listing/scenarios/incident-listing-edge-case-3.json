@@ -1,18 +1,19 @@
 {
-  "id": "incident-listing-success-1",
-  "name": "List all incidents and summarize",
-  "description": "Tests the successful retrieval and summarization of all incidents without any filters.",
+  "id": "incident-listing-edge-case-3",
+  "name": "List incidents with state filter and summarize",
+  "description": "Tests the retrieval and summarization of incidents filtered by a specific state.",
   "skillName": "incident-listing",
-  "type": "success",
+  "type": "edge-case",
   "input": {
-    "prompt": "Using the Incident-Management-v4 MCP server, list all incidents using the Incident-Management-v4_listIncident tool and provide a summary of the incident IDs, names, states, priorities, and domains."
+    "prompt": "Using the Incident-Management-v4 MCP server, list incidents using the Incident-Management-v4_listIncident tool, filtering for incidents with 'raised' state. Summarize the incident IDs, names, states, priorities, and domains."
   },
   "expectedOutput": {
     "shouldContain": [
       "Incident",
       "state",
       "priority",
-      "domain"
+      "domain",
+      "raised"
     ],
     "shouldNotContain": [
       "error",
@@ -38,15 +39,19 @@
       {
         "type": "contains",
         "value": "domain"
+      },
+      {
+        "type": "contains",
+        "value": "raised"
       }
     ]
   },
   "metadata": {
     "difficulty": "medium",
     "tags": [
-      "success",
+      "edge-case",
       "incident-listing",
-      "no-filter"
+      "state-filter"
     ],
     "createdAt": "2026-02-01T13:44:40.047Z"
   }

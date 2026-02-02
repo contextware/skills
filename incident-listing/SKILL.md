@@ -4,12 +4,13 @@ description: >-
   Skill for retrieving and summarizing incidents using an MCP Incident
   Management server. Enables agents to list incidents, optionally filter them,
   and present results clearly to users.
-version: 4.0.0
-author: agent-skills-workbench
-mcp-servers: ["Incident-Management-v4"]
-tags: [incident, tmforum, mcp, oauth, portable]
+metadata:
+  createdAt: '2026-02-01T13:44:46.358Z'
+allowed-tools:
+  - Incident-Management-v4_listIncident
+mcp-servers:
+  - Incident-Management-v4
 ---
-
 # Incident Listing Skill
 
 This skill enables you to retrieve and summarize incidents through an Incident Management system.

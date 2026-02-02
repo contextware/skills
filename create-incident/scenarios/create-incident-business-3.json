@@ -1,0 +1,60 @@
+{
+  "id": "create-incident-business-3",
+  "name": "Create Incident for Degraded Voice Quality",
+  "description": "A customer support engineer creates an incident based on multiple reports of degraded voice quality in a specific region.",
+  "skillName": "create-incident",
+  "type": "business",
+  "input": {
+    "prompt": "We've received numerous customer complaints about poor voice quality in the greater London area. Create a medium-priority incident categorized as 'Voice Quality Degradation' and link it to the London region."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "medium",
+      "Voice Quality Degradation",
+      "London",
+      "created"
+    ],
+    "shouldNotContain": [
+      "error"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": []
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "business",
+      "incident",
+      "voice",
+      "quality",
+      "support"
+    ],
+    "createdAt": "2026-02-01T11:27:07.775Z",
+    "updatedAt": "2026-02-01T11:27:07.779Z"
+  },
+  "testdata": {
+    "mockServer": "tmf724",
+    "setup": [
+      {
+        "collection": "incident",
+        "file": "empty.json",
+        "clearBefore": true
+      }
+    ],
+    "teardown": "keep",
+    "assertions": [
+      {
+        "collection": "incident",
+        "query": {
+          "priority": "medium",
+          "category": "Voice Quality Degradation",
+          "sourceObject.id": "london_region"
+        },
+        "expectedCount": 1
+      }
+    ]
+  }
+}
