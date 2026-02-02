@@ -4,7 +4,7 @@ description: >-
   Skill for creating and listing incidents via the Incident Management MCP
   server. Includes OAuth handling.
 metadata:
-  createdAt: '2026-02-01T21:10:53.440Z'
+  createdAt: '2026-02-01T22:10:53.440Z'
   lastTestDate: '2026-02-02T08:59:40.005Z'
   passRate: 100
 allowed-tools:
