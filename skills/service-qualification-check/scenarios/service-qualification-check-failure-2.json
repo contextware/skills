@@ -1,0 +1,53 @@
+{
+  "id": "service-qualification-check-failure-2",
+  "name": "Handle unrecognized service type",
+  "description": "Test the agent's ability to handle an unrecognized service type and request more specific information.",
+  "skillName": "service-qualification-check",
+  "type": "failure",
+  "input": {
+    "prompt": "Using the Telepath MCP server, check if 'super fast internet' is available at 456 Oak Avenue, Springfield. Report if the service type is not recognized."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "not recognized",
+      "more specific"
+    ],
+    "shouldNotContain": [
+      "available",
+      "failed"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "not recognized"
+      },
+      {
+        "type": "contains",
+        "value": "more specific"
+      },
+      {
+        "type": "not-contains",
+        "value": "available"
+      },
+      {
+        "type": "not-contains",
+        "value": "failed"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "failure",
+      "telepath",
+      "service qualification",
+      "error handling"
+    ],
+    "createdAt": "2026-02-07T19:36:59.440Z",
+    "updatedAt": "2026-02-08T08:00:49.167Z"
+  }
+}

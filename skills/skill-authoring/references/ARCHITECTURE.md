@@ -4,7 +4,7 @@ This document describes the separation of concerns between skills, scripts, and 
 
 ## Overview
 
-The architecture has three distinct layers:
+The architecture has three distinct layers shown below:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐

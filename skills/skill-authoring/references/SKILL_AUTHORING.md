@@ -108,12 +108,37 @@ Suggest approaches without mandating specific implementations.
 
 ```markdown
 ✅ GOOD:
-"For agents with static MCP configuration, save credentials 
+"For agents with static MCP configuration, save credentials
 and instruct the user to add the MCP server entry to their config."
 
 ❌ BAD:
 "Edit ~/.claude.json and add the following to mcpServers..."
 ```
+
+### 6. Include Reference MCP Server URLs
+
+The agent consuming your skill may not have the same MCP servers you used when authoring it. To keep skills portable:
+
+- **Describe the capability needed** — what tools the server provides and what they do
+- **Include a reference MCP server URL** — a publicly accessible endpoint that any agent can use as a working default
+- **Be permissive** — if the consuming agent already has a local MCP server with the same tools, it should feel free to use that instead
+
+```markdown
+✅ GOOD:
+"This skill requires an MCP server that provides incident management tools.
+If you do not already have a suitable server configured, you can use this
+reference endpoint: https://incidents.mcpgateway.online/mcp"
+
+❌ BAD:
+"You must first locate an incident management MCP server in your environment."
+(This causes agents to stall or pick the wrong server)
+
+❌ BAD:
+"Connect to the Incident-Management-v4 server."
+(No URL — agents without this server configured have no way forward)
+```
+
+**Why this matters**: Without a reference URL, agents that don't have the server configured locally will stall — they have no way to proceed. With a reference URL, any agent can pick up the skill and start working immediately.
 
 ---
 
@@ -146,10 +171,17 @@ One-paragraph description of what this skill enables.
 - Python 3.9+ (if applicable)
 
 ### MCP Server Dependencies
-This skill requires the **Server Name** MCP server.
+This skill requires an MCP server that provides **[capability description]** tools.
+
+**Required tools:** `toolA`, `toolB`
+
+**Reference MCP Server:**
+If you do not already have a locally configured MCP server that provides these tools, you can use the following reference endpoint:
 - **Transport**: HTTP
-- **URL**: `https://api.example.com/mcp`
+- **URL**: `https://example-server.mcpgateway.online/mcp`
 - **Authentication**: Bearer token via `Authorization` header
+
+If you have your own MCP server that provides equivalent functionality, use that instead.
 
 ## Workflow
 
@@ -269,10 +301,11 @@ GOOD: "Run the bundled `scripts/check-auth.js` script"
 GOOD: "Execute the config helper script with the 'generate' command"
 ```
 
-### ✅ Declarative MCP Requirements
+### ✅ Declarative MCP Requirements with Reference URLs
 
 ```markdown
-GOOD: "This skill requires the Nango MCP server with HTTP transport"
+GOOD: "This skill requires an MCP server that provides CRM integration tools.
+       If you don't have one configured, use this reference endpoint: https://api.nango.dev/mcp"
 GOOD: "The MCP server needs these headers at connection time: Authorization, connection-id"
 ```
 
@@ -355,38 +388,50 @@ When your skill depends on MCP servers, document them declaratively:
 
 ### What to Include
 
-1. **Server Name**: The identifier for the MCP server
-2. **Transport Type**: HTTP, SSE, or stdio
-3. **URL**: The server endpoint
-4. **Authentication**: What headers/credentials are needed
-5. **Available Tools**: Brief list of tools the server provides
+1. **Capability Description**: What the MCP server provides (e.g., "incident management", "CRM integration")
+2. **Required Tools**: The specific tools the skill uses
+3. **Transport Type**: HTTP, SSE, or stdio
+4. **Reference URL**: A publicly accessible endpoint that any agent can use as a default
+5. **Authentication**: What headers/credentials are needed
+6. **Permissive language**: Make it clear agents can use their own server if they have one
 
 ### What NOT to Include
 
 - Specific CLI commands for adding the server
 - Config file paths for specific agents
 - Platform-specific connection procedures
+- Directive language telling agents they must find their own server URL first
+
+### MCP Server URL Resolution
+
+The agent consuming your skill may not have the same MCP servers configured as the skill author. To handle this:
+
+1. **Describe the capability** — focus on what tools are needed, not a specific server identity
+2. **Include a reference URL** — a working endpoint from the MCP registry that any agent can connect to
+3. **Be permissive** — let the consuming agent decide if it has a suitable local match. If it does, great. If not, the reference URL gives it a way to proceed
+
+**Don't be directive** about requiring agents to find their own URL. Language like "you must first locate a server in your environment" causes agents to stall or pick the wrong server. Instead, lead with the reference URL and note they can substitute their own.
 
 ### Example
 
 ```markdown
 ## MCP Server Requirements
 
-This skill requires the **Nango** MCP server.
+This skill requires an MCP server that provides **SaaS integration** tools via Nango.
 
-**Server Details:**
+**Required tools:** `whoami`, `list_contacts`, `query`
+
+**Reference MCP Server:**
+If you do not already have a locally configured MCP server that provides these tools, you can use the following reference endpoint:
 - Transport: HTTP
 - URL: `https://api.nango.dev/mcp`
+
+If you have your own Nango-compatible MCP server, use that instead.
 
 **Required Headers (at connection time):**
 - `Authorization`: Bearer <secret_key>
 - `connection-id`: <connection_id from OAuth>
 - `provider-config-key`: <provider name>
-
-**Available Tools:**
-- `whoami`: Check connected account
-- `list_contacts`: List CRM contacts
-- `query`: Execute custom queries
 ```
 
 ### OAuth-Protected MCP Servers
@@ -402,7 +447,9 @@ Some MCP servers require OAuth authentication before they can be used. When docu
 ```markdown
 ## MCP Server Requirements
 
-This skill requires the **Incident-Management-v4** MCP server.
+This skill requires an MCP server that provides **incident management** tools.
+
+**Required tools:** `createIncident`, `listIncidents`, `retrieveIncident`
 
 > [!IMPORTANT]
 > This server is **OAuth-protected**. When connecting, the platform will:
@@ -410,17 +457,16 @@ This skill requires the **Incident-Management-v4** MCP server.
 > 2. The agent should present this URL to the user
 > 3. After user authorization, retry the connection
 
-**Server Details:**
+**Reference MCP Server:**
+If you do not already have a locally configured MCP server that provides these tools, you can use the following reference endpoint:
 - Transport: HTTP
-- URL: Configured in MCP registry
+- URL: `https://incidents.mcpgateway.online/mcp`
+
+If you have your own incident management MCP server, use that instead.
 
 **Authentication:**
 - Type: OAuth 2.0
 - Handled by: Platform (see `mcp-server-oauth` skill for details)
-
-**Available Tools (after authentication):**
-- `createIncident`: Create a new incident
-- `listIncidents`: List existing incidents
 ```
 
 **Key Pattern**: Don't prescribe HOW to do OAuth - describe THAT OAuth is required and what the outcome looks like.
@@ -487,7 +533,8 @@ try {
 - [ ] No hardcoded config file paths
 - [ ] Scripts use only standard runtime features
 - [ ] All dependencies are bundled or use built-ins
-- [ ] MCP requirements are documented declaratively
+- [ ] MCP requirements are documented declaratively with reference URL
+- [ ] Reference URL included so agents without the server can still proceed
 - [ ] Platform Adaptation Notes are provided (if applicable)
 
 ### Cross-Platform Testing
@@ -506,7 +553,8 @@ Test your skill on multiple agents if possible:
 |--------|----|----|
 | Instructions | Natural language | Tool-specific syntax |
 | Scripts | Self-contained | External dependencies |
-| MCP servers | Declarative requirements | Connection procedures |
+| MCP servers | Declarative requirements + reference URL | Connection procedures |
+| MCP server URLs | Include a working reference endpoint | Require agents to find their own |
 | Execution | Describe expected behavior | Dictate sandbox tech |
 | Config paths | Agent-agnostic hints | Hardcoded locations |
 

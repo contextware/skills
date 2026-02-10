@@ -1,0 +1,38 @@
+{
+  "id": "hubspot-task-manager-edge-case-3",
+  "name": "Delete task with natural language date processing",
+  "description": "Test the agent's ability to sequence tools and handle date logic for a specific task operation.",
+  "skillName": "hubspot-task-manager",
+  "type": "edge-case",
+  "input": {
+    "prompt": "Create a HubSpot task titled 'Temporary Task' due tomorrow at 5pm, then delete it immediately."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "deleted",
+      "Temporary Task"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "nango-mcp-server_create-task",
+      "nango-mcp-server_delete-task"
+    ],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "deleted"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "hard",
+    "tags": [
+      "edge-case",
+      "sequencing",
+      "date-conversion"
+    ],
+    "createdAt": "2025-02-08T15:00:00.000Z"
+  }
+}

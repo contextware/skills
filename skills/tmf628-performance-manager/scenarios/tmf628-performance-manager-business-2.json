@@ -1,0 +1,76 @@
+{
+  "id": "tmf628-performance-manager-business-2",
+  "name": "Detect Anomalous Overnight Traffic Patterns",
+  "description": "Security and Ops engineer identifies irregular traffic spikes that deviate significantly from the baseline.",
+  "skillName": "tmf628-performance-manager",
+  "type": "business",
+  "input": {
+    "prompt": "Identify any cells with traffic anomalies greater than 3 standard deviations from their baseline, specifically looking at overnight patterns. We need to rule out unauthorized usage or configuration errors."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "anomaly",
+      "standard deviation",
+      "overnight",
+      "baseline"
+    ],
+    "shouldNotContain": []
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "Performance-Management-v4_listMeasurementCollectionJob"
+    ],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "anomaly"
+      },
+      {
+        "type": "contains",
+        "value": "standard deviation"
+      },
+      {
+        "type": "contains",
+        "value": "overnight"
+      },
+      {
+        "type": "contains",
+        "value": "baseline"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "hard",
+    "tags": [
+      "business",
+      "anomaly-detection",
+      "security",
+      "ops"
+    ],
+    "createdAt": "2026-02-09T19:32:57.734Z",
+    "updatedAt": "2026-02-10T16:32:29.115Z"
+  },
+  "testdata": {
+    "mockServer": "tmf628",
+    "setup": [
+      {
+        "collection": "performanceIndicatorSpecification",
+        "file": "performanceIndicatorSpecification.json",
+        "clearBefore": true
+      },
+      {
+        "collection": "dataAccessEndpoint",
+        "file": "dataAccessEndpoint.json",
+        "clearBefore": true
+      },
+      {
+        "collection": "performanceMeasurement",
+        "file": "scenario3-anomaly-detection.json",
+        "clearBefore": true
+      }
+    ],
+    "teardown": "keep",
+    "assertions": []
+  }
+}

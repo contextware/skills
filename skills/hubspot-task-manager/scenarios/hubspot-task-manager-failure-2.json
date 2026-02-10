@@ -1,0 +1,38 @@
+{
+  "id": "hubspot-task-manager-failure-2",
+  "name": "Handle missing task ID during update",
+  "description": "Test error handling when the agent is asked to update a task without providing a required identifier.",
+  "skillName": "hubspot-task-manager",
+  "type": "failure",
+  "input": {
+    "prompt": "Update the notes of my task to 'Updated notes'."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "ID",
+      "missing",
+      "provide"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [
+      "nango-mcp-server_update-task"
+    ],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "ID"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "failure",
+      "validation",
+      "error-handling"
+    ],
+    "createdAt": "2025-02-08T15:00:00.000Z"
+  }
+}

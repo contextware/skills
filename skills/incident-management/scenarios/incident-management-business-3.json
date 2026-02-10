@@ -1,0 +1,72 @@
+{
+  "id": "incident-management-business-3",
+  "name": "SLA Tracking for Performance Degradation",
+  "description": "RAN engineer tracks a high-priority performance issue to ensure it is being handled within SLA timings.",
+  "skillName": "incident-management",
+  "type": "business",
+  "input": {
+    "prompt": "Check the status of the performance degradation incident for cell DUB-4G-112. I need to know the current state, the occur time, and any notes regarding the packet loss investigation to ensure we aren't breaching our 8-hour resolution SLA."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "DUB-4G-112",
+      "packet loss",
+      "SLA"
+    ],
+    "shouldNotContain": [
+      "critical",
+      "resolved"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "Incident-Management-v4_listIncident"
+    ],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "DUB-4G-112"
+      },
+      {
+        "type": "contains",
+        "value": "packet loss"
+      },
+      {
+        "type": "contains",
+        "value": "SLA"
+      },
+      {
+        "type": "not-contains",
+        "value": "critical"
+      },
+      {
+        "type": "not-contains",
+        "value": "resolved"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "business",
+      "performance",
+      "sla",
+      "ran"
+    ],
+    "createdAt": "2026-02-08T16:12:42.104Z",
+    "updatedAt": "2026-02-08T17:46:01.428Z"
+  },
+  "testdata": {
+    "mockServer": "tmf724",
+    "setup": [
+      {
+        "collection": "incident",
+        "file": "scenario3-performance-degradation.json",
+        "clearBefore": true
+      }
+    ],
+    "teardown": "keep",
+    "assertions": []
+  }
+}

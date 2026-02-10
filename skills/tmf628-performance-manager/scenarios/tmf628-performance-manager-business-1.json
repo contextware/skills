@@ -1,0 +1,68 @@
+{
+  "id": "tmf628-performance-manager-business-1",
+  "name": "Identify Capacity Hotspots for Upgrade Planning",
+  "description": "Capacity engineer identifies cells exceeding utilization thresholds during peak hours to justify infrastructure investment.",
+  "skillName": "tmf628-performance-manager",
+  "type": "business",
+  "input": {
+    "prompt": "Find all cells exceeding 80% utilization during the 7–9 AM peak window over the past week. I need a list of these hotspots to plan our next round of capacity upgrades."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "utilization",
+      "80%",
+      "hotspot",
+      "peak"
+    ],
+    "shouldNotContain": [
+      "error",
+      "no data found"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "Performance-Management-v4_listPerformanceIndicatorSpecification",
+      "Performance-Management-v4_listMeasurementCollectionJob"
+    ],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "utilization"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "business",
+      "capacity-planning",
+      "ran",
+      "utilization"
+    ],
+    "createdAt": "2026-02-09T19:32:57.734Z",
+    "updatedAt": "2026-02-09T19:32:57.736Z"
+  },
+  "testdata": {
+    "mockServer": "tmf628",
+    "setup": [
+      {
+        "collection": "performanceIndicatorSpecification",
+        "file": "performanceIndicatorSpecification.json",
+        "clearBefore": true
+      },
+      {
+        "collection": "dataAccessEndpoint",
+        "file": "dataAccessEndpoint.json",
+        "clearBefore": true
+      },
+      {
+        "collection": "performanceMeasurement",
+        "file": "scenario2-congestion-hotspots.json",
+        "clearBefore": true
+      }
+    ],
+    "teardown": "keep",
+    "assertions": []
+  }
+}

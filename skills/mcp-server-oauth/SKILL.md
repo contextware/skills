@@ -608,6 +608,17 @@ The following section documents the response format used by platforms with built
   - After clearing, retry the OAuth flow from the beginning with `connect_to_mcp_server`
 → **Important**: This only clears auth data for the specific server you specify - other MCP servers are unaffected
 
+**"Client credentials (clientId/clientSecret) have changed"**
+→ If the OAuth client credentials have been updated in the identity provider (e.g., new client secret in Keycloak)
+→ **Solution A: Clear OAuth config and start fresh:**
+  - Use the `clear_oauth_config` tool: Call `clear_oauth_config({"serverName": "your-server-name"})`
+  - This removes the stored clientId, clientSecret, scope, etc. from `config/mcp-oauth.json`
+  - The next `connect_to_mcp_server` call will trigger OAuth discovery again, prompting for new credentials
+→ **Solution B: Update OAuth config directly:**
+  - Use the `update_oauth_config` tool: Call `update_oauth_config({"serverName": "your-server-name", "clientId": "mcp-server", "clientSecret": "new-secret"})`
+  - This updates the stored OAuth configuration with the new credentials
+  - Then call `clear_mcp_auth` to clear any stale tokens, followed by `connect_to_mcp_server` to re-authenticate
+
 **"User authenticated but connection still fails"**
 → The authentication scope may be insufficient
 → Check if the server requires specific OAuth scopes

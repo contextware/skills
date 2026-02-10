@@ -1,0 +1,81 @@
+{
+  "id": "incident-management-business-1",
+  "name": "Correlate Regional Customer Complaints",
+  "description": "NOC engineer identifies a spike in complaints and checks for existing regional incidents to perform correlation and avoid duplicate work.",
+  "skillName": "incident-management",
+  "type": "business",
+  "input": {
+    "prompt": "We have over 150 customer complaints coming in from Galway regarding voice call failures. Please list all current incidents in the RAN domain for the Galway region so I can see if there is an existing issue to correlate these complaints with."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "Galway",
+      "voice call failures",
+      "INC002-HIGH"
+    ],
+    "shouldNotContain": [
+      "error",
+      "no incidents found"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "Incident-Management-v4_listIncident"
+    ],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "Galway"
+      },
+      {
+        "type": "contains",
+        "value": "voice call failures"
+      },
+      {
+        "type": "contains",
+        "value": "INC002-HIGH"
+      },
+      {
+        "type": "not-contains",
+        "value": "error"
+      },
+      {
+        "type": "not-contains",
+        "value": "no incidents found"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "business",
+      "incident",
+      "correlation",
+      "noc"
+    ],
+    "createdAt": "2026-02-08T16:12:42.104Z",
+    "updatedAt": "2026-02-08T17:43:41.270Z"
+  },
+  "testdata": {
+    "mockServer": "tmf724",
+    "setup": [
+      {
+        "collection": "incident",
+        "file": "scenario2-customer-complaints.json",
+        "clearBefore": true
+      }
+    ],
+    "teardown": "keep",
+    "assertions": [
+      {
+        "collection": "incident",
+        "query": {
+          "domain": "RAN",
+          "priority": "high"
+        },
+        "expectedCount": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "jira-issue-manager-success-2",
+  "name": "Create Jira Issue Success",
+  "description": "Verify the agent follows the multi-step process to fetch issue types and then create a new issue.",
+  "skillName": "jira-issue-manager",
+  "type": "success",
+  "input": {
+    "prompt": "Create a new Jira issue with the summary 'Bug: UI alignment issue'. First, use the scripts/get-issue-types.js script to find the correct issue type ID, then use the nango-mcp-server_create_issue tool to create the issue in project 10001. Return the confirmation of the created issue."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "created",
+      "issue"
+    ],
+    "shouldNotContain": [
+      "error",
+      "invalid project"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "created"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "jira",
+      "create-issue",
+      "nango"
+    ],
+    "createdAt": "2026-02-08T15:35:28.905Z",
+    "updatedAt": "2026-02-08T15:35:28.906Z"
+  }
+}

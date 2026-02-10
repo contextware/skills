@@ -60,6 +60,7 @@ Use these **core principles**:
 3. **Bundle self-contained scripts** - No external dependencies
 4. **Declare requirements** - Use frontmatter for machine-readable deps
 5. **Provide platform hints** - But as suggestions, not requirements
+6. **Include reference MCP server URLs** - So agents without their own server can still proceed (see below)
 
 ### Phase 4: Create Bundled Scripts
 
@@ -83,6 +84,36 @@ For agents that can add MCP servers during a session...
 For agents requiring config file + restart...
 ```
 
+### Phase 6: Document MCP Server URLs for Portability
+
+Skills that depend on MCP servers must help **other agents** find and connect to the right server. The agent consuming your skill may not have the same MCP servers configured locally.
+
+**The pattern**: Describe what capabilities are needed, list the required tools, and provide a **reference MCP server URL** as a working default. Be permissive — let the consuming agent decide whether to use its own local server or the reference one.
+
+When writing the MCP Server Requirements section of your skill, use this pattern:
+
+```markdown
+## MCP Server Requirements
+
+This skill requires an MCP server that provides **[capability description]** (e.g., incident management, CRM integration).
+
+**Required tools:** `toolA`, `toolB`, `toolC`
+
+**Reference MCP Server:**
+If you do not already have a locally configured MCP server that provides these tools, you can use the following reference endpoint:
+- Transport: HTTP
+- URL: `https://<server-name>.mcpgateway.online/mcp`
+
+If you have your own MCP server that provides equivalent functionality, use that instead.
+```
+
+**Why this matters**: Without a reference URL, agents that don't have the server configured locally will stall — they have no way to proceed. With a reference URL, any agent can pick up the skill and start working immediately.
+
+**Key principles**:
+- **Be permissive**: Don't insist agents use the reference URL. If they have a local match, that's fine.
+- **Don't be directive**: Don't tell agents they "must find their own server URL first" — this causes them to pick the wrong server or get stuck searching.
+- **Describe capability, not identity**: Focus on what tools are needed, not a specific server name. This allows agents to match against their own servers by capability.
+
 ---
 
 ## Patterns to Avoid
@@ -105,6 +136,7 @@ For agents requiring config file + restart...
 | Declarative MCP | "Requires the 'nango' MCP server (HTTP transport)" |
 | Capability hints | "For agents with dynamic MCP support..." |
 | **User-blocking actions** | "Present the auth URL, then **STOP AND WAIT** for user confirmation" |
+| **Reference MCP URLs** | "If you don't have a local server with these tools, use this reference endpoint: ..." |
 
 ---
 
@@ -133,7 +165,7 @@ The script outputs JSON indicating authentication status.
 - [ ] No platform-specific tool syntax in SKILL.md
 - [ ] No hardcoded config file paths
 - [ ] Scripts use only standard runtime features  
-- [ ] MCP requirements documented declaratively
+- [ ] MCP requirements documented declaratively with reference URL
 - [ ] Natural language workflow descriptions
 - [ ] Platform Adaptation Notes included (if applicable)
 - [ ] **User-blocking actions have explicit STOP AND WAIT instructions**
