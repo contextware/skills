@@ -1,0 +1,41 @@
+{
+  "id": "jira-issue-manager-failure-3",
+  "name": "Handle Missing Nango Credentials",
+  "description": "Test error handling when the agent cannot retrieve the necessary Nango secret key or cloudId to run the script.",
+  "skillName": "jira-issue-manager",
+  "type": "failure",
+  "input": {
+    "prompt": "Attempt to list Jira issue types using the scripts/get-issue-types.js script. If the NANGO_SECRET_KEY is missing from the environment, report the specific authentication error encountered."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "error",
+      "key",
+      "missing"
+    ],
+    "shouldNotContain": [
+      "Issue Types:",
+      "10001"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "error"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "failure",
+      "error-handling",
+      "auth"
+    ],
+    "createdAt": "2026-02-08T15:35:28.905Z",
+    "updatedAt": "2026-02-08T15:35:28.906Z"
+  }
+}

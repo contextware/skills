@@ -1,0 +1,67 @@
+{
+  "id": "incident-management-business-2",
+  "name": "Emergency Security Incident Escalation",
+  "description": "Security engineer detects a DDoS attack and must immediately create a critical incident for the security team to begin mitigation.",
+  "skillName": "incident-management",
+  "type": "business",
+  "input": {
+    "prompt": "Potential DDoS attack detected on our Dublin authentication servers. Create a critical security incident immediately under the Security domain. Set the source object ID to AUTH-SRV-DUB-01 and mark it as unacknowledged so the on-call team gets alerted."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "DDoS",
+      "critical",
+      "Security",
+      "AUTH-SRV-DUB-01"
+    ],
+    "shouldNotContain": [
+      "low",
+      "medium"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "Incident-Management-v4_createIncident"
+    ],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "created"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "business",
+      "security",
+      "ddos",
+      "critical"
+    ],
+    "createdAt": "2026-02-08T16:12:42.104Z",
+    "updatedAt": "2026-02-08T16:12:42.106Z"
+  },
+  "testdata": {
+    "mockServer": "tmf724",
+    "setup": [
+      {
+        "collection": "incident",
+        "file": "empty.json",
+        "clearBefore": true
+      }
+    ],
+    "teardown": "keep",
+    "assertions": [
+      {
+        "collection": "incident",
+        "query": {
+          "priority": "critical",
+          "domain": "Security",
+          "sourceObject.id": "AUTH-SRV-DUB-01"
+        },
+        "expectedCount": 1
+      }
+    ]
+  }
+}

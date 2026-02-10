@@ -35,34 +35,91 @@ The Nango MCP server uses header-based authentication at connection time.
 
 ### Credentials
 - `NANGO_SECRET_KEY`: Your Nango secret key from nango.dev.
-- `NANGO_DEFAULT_USER_ID`: The end-user identifier for the connection.
+- `NANGO_DEFAULT_USER_ID`: The end-user identifier used to look up connections (e.g., an email address).
 
 ### Runtime
 - Node.js 18+ (for bundled scripts using built-in fetch)
 
 ---
 
+## ⚠️ CRITICAL: Understanding Connection IDs
+
+**DO NOT confuse these two values:**
+
+| Value | What It Is | Example | Used For |
+|-------|-----------|---------|----------|
+| `NANGO_DEFAULT_USER_ID` | Your user identifier | `user@example.com` | Script uses this to FIND the connection |
+| `connectionId` | Nango's connection ID | `hubspot-abc123` | Required `connection-id` header value |
+
+**The `connection-id` header MUST be the `connectionId` returned by `check-auth.js`, NOT the `NANGO_DEFAULT_USER_ID`.**
+
+Example script output:
+```json
+{
+  "status": "success",
+  "connectionId": "hubspot-abc123",   ← USE THIS as connection-id header
+  "endUserId": "user@example.com"     ← This is NOT the connection-id
+}
+```
+
+---
+
 ## Workflow
 
+**IMPORTANT - Understand the Goal**:
+This skill is NOT about "connecting to Nango" as an end goal. This skill enables you to **accomplish user tasks** (like getting HubSpot data, listing Salesforce records, etc.) by using Nango as the integration proxy. The connection steps are prerequisites that should flow seamlessly into actually using the tools to fulfill the user's request.
+
 ### Phase 1: Check Connection Status
-First, determine if the Nango MCP server is already connected. If Nango-specific tools (like `whoami` or `list_contacts`) are already available in your environment, you can skip to normal usage.
+First, determine if the Nango MCP server is already connected. If Nango-specific tools (like `whoami` or `list_contacts`) are already available in your environment, you can skip ahead and use those tools immediately to fulfill the user's request.
 
 ### Phase 2: Handle Authentication
-If tools are not available, you must obtain a `connectionId`.
+If tools are not available, you must obtain a `connectionId` by running the authentication script.
 
 1. **Identify Provider**: Determine which provider the user wants to connect to (e.g., `hubspot`, `salesforce`) by checking the original request or current skill context. Only ask the user if the provider is not mentioned and cannot be inferred.
+
 2. **Get Secret Key**: Attempt to retrieve the `NANGO_SECRET_KEY` from the environment variables (e.g., via platform tools or direct environment access). Do NOT ask the user for this key if it is already available.
+
 3. **Run the authentication script**: Execute `scripts/check-auth.js` passing the inferred provider and the retrieved secret key.
    ```bash
    node scripts/check-auth.js <provider> <secret_key>
    ```
-4. **Handle Response**:
-   - **Success**: The script returns a `connectionId`. Proceed immediately to configure the MCP server.
-   - **Needs Auth**: The script returns an `authUrl`. Present this URL to the user and wait for them to confirm completion. Once confirmed, re-run the script to get the `connectionId`.
-   - **Error**: Report the error to the user.
 
-### Phase 3: Configure and Use MCP Server
-Once you have the `connectionId`, **IMMEDIATELY PROCEED** with the following steps without pausing:
+4. **Parse the script output (CRITICAL)**: The script outputs JSON to stdout. You MUST parse this JSON and extract the `connectionId` field.
+
+   **Example success output:**
+   ```json
+   {
+     "status": "success",
+     "connectionId": "hubspot-abc123",
+     "integrationId": "hubspot",
+     "endUserId": "user@example.com"
+   }
+   ```
+
+   **⚠️ IMPORTANT**: Extract and store the `connectionId` value (e.g., `hubspot-abc123`). This is what you will use as the `connection-id` header in Phase 3. Do NOT use `endUserId` or `NANGO_DEFAULT_USER_ID` as the connection-id header.
+
+5. **Handle Response Based on Status**:
+   - **`status: "success"`**: You have a valid `connectionId`. Proceed immediately to Phase 3.
+   - **`status: "needs_auth"`**: The script returns an `authUrl`. Present this URL to the user and wait for them to confirm completion. Once confirmed, re-run the script to get the `connectionId`.
+   - **`status: "error"`**: Report the error to the user.
+
+### Phase 3: Configure, Connect, and Use MCP Server
+
+**[CRITICAL - READ THIS FIRST]**:
+Once you have the `connectionId`, you must complete ALL steps below **in one continuous sequence** without stopping or asking for permission. The goal of this skill is NOT to "connect to Nango" - it is to **use Nango to accomplish the user's original request** (e.g., get HubSpot data, list contacts, etc.). Connecting is only a prerequisite step.
+
+**Do NOT**:
+- Report "I've configured the headers" and stop
+- Report "I've connected to the MCP server" and stop
+- Report "Now I can connect" and stop
+- Ask for permission between steps 3.1-3.4
+
+**DO**:
+- Execute steps 3.1 through 3.4 continuously
+- Only report the final result to the user (e.g., the actual HubSpot data)
+- If any step fails, report the error with details
+
+---
 
 **Step 3.1 - Provision Authentication Headers:**
 Configure the Nango MCP server with these three required headers (use your platform's credential storage mechanism):
@@ -70,8 +127,10 @@ Configure the Nango MCP server with these three required headers (use your platf
 - **Server URL**: `https://api.nango.dev/mcp`
 - **Headers to configure** (provision all three):
   1. `Authorization`: `Bearer <NANGO_SECRET_KEY>`
-  2. `connection-id`: `<connectionId>` (from Phase 2)
+  2. `connection-id`: `<connectionId>` ← **Use the `connectionId` from Phase 2 script output**
   3. `provider-config-key`: `<provider>` (e.g., "hubspot", "salesforce")
+
+**⚠️ COMMON MISTAKE**: Do NOT use `NANGO_DEFAULT_USER_ID` or any email address as the `connection-id`. The `connection-id` must be the Nango connection identifier returned by `check-auth.js` (e.g., `hubspot-abc123`), not a user email.
 
 *Platform-specific notes:*
 - Some platforms may require separate calls to provision each header
@@ -256,15 +315,13 @@ If a server requires auth, headers are just decoration on top of this.
 **Step 3.3 - List Available Tools:**
 Query the MCP server to discover which tools are now available (e.g., `whoami`, `list_contacts`, `query`, etc.). This confirms authentication succeeded.
 
-**Step 3.4 - Execute User's Request:**
-Use the appropriate tool(s) to fulfill the user's original request immediately.
+**Step 3.4 - Execute the User's Original Request:**
+NOW use the appropriate tool(s) to fulfill what the user actually asked for. For example:
+- If they asked "who am I in HubSpot?", call the `whoami` tool and display the result
+- If they asked "list my contacts", call the `list_contacts` tool and show the contacts
+- If they asked "create a contact", call the appropriate creation tool
 
-**[CRITICAL - DO NOT STOP]**:
-- Execute steps 3.1 through 3.4 **in sequence without pausing**
-- Do NOT ask for permission between steps
-- Do NOT report "I've configured the headers" and stop
-- The user should see the final result (e.g., the HubSpot data), not intermediate status messages
-- If authentication fails, report the error with details
+**This step completes the task** - not Step 3.2 or 3.3. The user should see their requested data, not status messages about connections.
 
 ---
 
@@ -320,6 +377,8 @@ node connect-direct.js
 
 ## Troubleshooting
 
+- **HTTP 400 Bad Request**: This usually means the `connection-id` header is wrong. Verify you are using the `connectionId` from `check-auth.js` output, NOT `NANGO_DEFAULT_USER_ID`. The connection-id should look like `hubspot-abc123`, not an email address.
 - **Authentication failed**: Verify the `NANGO_SECRET_KEY` and ensure the provider is configured in your Nango account.
 - **Tools not appearing**: Ensure the headers are correctly sent during the MCP connection handshake.
 - **Connection-id not found**: The user may need to complete the authentication flow via the provided `authUrl`.
+- **Using wrong connection-id**: If you used an email address (like `user@example.com`) as the `connection-id`, that's incorrect. Re-run `check-auth.js` and use the `connectionId` field from the JSON output.

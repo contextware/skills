@@ -1,0 +1,81 @@
+{
+  "id": "tmf628-performance-manager-business-3",
+  "name": "Predict Capacity Exhaustion for Budgeting",
+  "description": "Network planner forecasts which sites will hit 100% load within 6 months based on current growth trends.",
+  "skillName": "tmf628-performance-manager",
+  "type": "business",
+  "input": {
+    "prompt": "Identify cells consistently above 70% utilization with growth rates indicating capacity exhaustion within 6 months. I need this for the Q3 budgeting report."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "exhaustion",
+      "growth rate",
+      "70%"
+    ],
+    "shouldNotContain": [
+      "error"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "Performance-Management-v4_listPerformanceIndicatorSpecification",
+      "Performance-Management-v4_listMeasurementCollectionJob",
+      "Performance-Management-v4_createMeasurementCollectionJob",
+      "Performance-Management-v4_listTrackingRecord",
+      "Performance-Management-v4_listOnDemandCollection"
+    ],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "exhaustion"
+      },
+      {
+        "type": "contains",
+        "value": "growth rate"
+      },
+      {
+        "type": "contains",
+        "value": "70%"
+      },
+      {
+        "type": "not-contains",
+        "value": "error"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "hard",
+    "tags": [
+      "business",
+      "forecasting",
+      "planning",
+      "budget"
+    ],
+    "createdAt": "2026-02-09T19:32:57.734Z",
+    "updatedAt": "2026-02-10T16:32:19.712Z"
+  },
+  "testdata": {
+    "mockServer": "tmf628",
+    "setup": [
+      {
+        "collection": "performanceIndicatorSpecification",
+        "file": "performanceIndicatorSpecification.json",
+        "clearBefore": true
+      },
+      {
+        "collection": "dataAccessEndpoint",
+        "file": "dataAccessEndpoint.json",
+        "clearBefore": true
+      },
+      {
+        "collection": "performanceMeasurement",
+        "file": "scenario5-capacity-planning.json",
+        "clearBefore": true
+      }
+    ],
+    "teardown": "keep",
+    "assertions": []
+  }
+}

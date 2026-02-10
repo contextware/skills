@@ -1,0 +1,39 @@
+{
+  "id": "jira-issue-manager-edge-case-5",
+  "name": "Edge Case: Create Issue after Dynamic Type Lookup",
+  "description": "Verify the agent can dynamically map a human-readable name like 'Task' to an ID via the script before calling the creation tool.",
+  "skillName": "jira-issue-manager",
+  "type": "edge-case",
+  "input": {
+    "prompt": "I want to create a 'Task' in Jira project 10001 with the summary 'Complete documentation'. Use the scripts/get-issue-types.js script to find the ID for the 'Task' issue type, and then execute the nango-mcp-server_create_issue tool using that ID. Return the resulting issue details."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "Task",
+      "documentation"
+    ],
+    "shouldNotContain": [
+      "error"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "Task"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "hard",
+    "tags": [
+      "edge-case",
+      "logic",
+      "mapping"
+    ],
+    "createdAt": "2026-02-08T15:35:28.905Z",
+    "updatedAt": "2026-02-08T15:35:28.907Z"
+  }
+}

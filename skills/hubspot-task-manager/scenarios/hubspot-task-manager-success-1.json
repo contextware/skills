@@ -1,0 +1,43 @@
+{
+  "id": "hubspot-task-manager-success-1",
+  "name": "Create a new HubSpot task for the current user",
+  "description": "Verify the agent correctly creates a task with the returned ID.",
+  "skillName": "hubspot-task-manager",
+  "type": "success",
+  "input": {
+    "prompt": "Create a task titled 'Follow up with lead' for me in HubSpot. Set the due date for December 25th, 2026."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "task",
+      "ID"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "nango-mcp-server_create-task"
+    ],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "task"
+      },
+      {
+        "type": "contains",
+        "value": "ID"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "success",
+      "hubspot",
+      "nango",
+      "task-creation"
+    ],
+    "createdAt": "2025-02-08T15:00:00.000Z",
+    "updatedAt": "2026-02-08T15:30:19.190Z"
+  }
+}

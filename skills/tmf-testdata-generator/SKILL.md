@@ -126,6 +126,21 @@ test-mock-servers/tmf{xxx}/
 | MongoDB connection | Ensure `DB_URL` uses the container service name (e.g., `mongodb://mongo:27017`) |
 | ID Conflicts | Use unique timestamp-based or counter-based ID patterns |
 | `mongoimport` Error | Ensure JSON is a valid array; use `--jsonArray` flag |
+| URI Validation Error | TMF Validators require **absolute URIs** for `href` and `@schemaLocation`. Use `https://tmf.mcpgateway.link/` as a base. |
+| Output Schema Mismatch | Ensure `indicatorType` is a primitive (`float`, `int`, etc.) and business types (KPI) go in `indicatorCategory`. |
+
+## URI & Indicator Constraints (TMF628 Special)
+
+For Performance Management (TMF628), these patterns are **mandatory** to pass MCP tool validation:
+
+1. **Absolute URIs**:
+   - `href`: `https://tmf.mcpgateway.link/tmf-api/performance/v4/{resource}/{id}`
+   - `@schemaLocation`: `https://tmf.mcpgateway.link/schemas/{resource}.schema.json`
+2. **Indicator Fields**:
+   - `indicatorType`: Must be one of `['string', 'int', 'float', 'double']`.
+   - `indicatorCategory`: Use this for `kpi`, `kqi`, `objective`, etc.
+   - `indicatorUnit`: Use instead of `unitOfMeasure` for standard compliance.
+   - `valueType`: Match the primitive type used in `indicatorType`.
 
 ## Verification Checklist
 
@@ -138,5 +153,5 @@ test-mock-servers/tmf{xxx}/
 - [x] API endpoints returning correct data
 
 ---
-**Last Updated:** 2026-02-02
-**Skill Version:** 1.2.0
+**Last Updated:** 2026-02-10
+**Skill Version:** 1.3.0

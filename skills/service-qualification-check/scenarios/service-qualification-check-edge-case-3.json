@@ -1,0 +1,50 @@
+{
+  "id": "service-qualification-check-edge-case-3",
+  "name": "Check service availability with incomplete address",
+  "description": "Test the agent's ability to handle incomplete addresses when checking service availability. The agent should attempt to qualify the service with the available information, but may return unavailable",
+  "skillName": "service-qualification-check",
+  "type": "edge-case",
+  "input": {
+    "prompt": "Using the Telepath MCP server and the telepath_service_qualification tool, determine if fiber is available at 789 Pine Lane. Report the service availability."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "available",
+      "not available"
+    ],
+    "shouldNotContain": [
+      "error"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [
+      "telepath_service_qualification",
+      "telepath_list_service_specifications"
+    ],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "available"
+      },
+      {
+        "type": "contains",
+        "value": "not available"
+      },
+      {
+        "type": "not-contains",
+        "value": "error"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "edge-case",
+      "telepath",
+      "service qualification"
+    ],
+    "createdAt": "2026-02-07T19:36:59.440Z",
+    "updatedAt": "2026-02-07T20:53:32.476Z"
+  }
+}

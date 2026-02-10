@@ -1,0 +1,39 @@
+{
+  "id": "jira-issue-manager-failure-4",
+  "name": "Create Issue with Invalid Project ID",
+  "description": "Test how the agent handles a tool failure when an invalid project ID is provided to the create_issue tool.",
+  "skillName": "jira-issue-manager",
+  "type": "failure",
+  "input": {
+    "prompt": "Use the nango-mcp-server_create_issue tool to create an issue with summary 'Test' in project '999999'. If the tool returns an error regarding the project ID, explain the failure to me."
+  },
+  "expectedOutput": {
+    "shouldContain": [
+      "error",
+      "project",
+      "not found"
+    ],
+    "shouldNotContain": [
+      "successfully created"
+    ]
+  },
+  "evaluationCriteria": {
+    "mustCallTools": [],
+    "mustNotCallTools": [],
+    "responseChecks": [
+      {
+        "type": "contains",
+        "value": "error"
+      }
+    ]
+  },
+  "metadata": {
+    "difficulty": "medium",
+    "tags": [
+      "failure",
+      "validation"
+    ],
+    "createdAt": "2026-02-08T15:35:28.905Z",
+    "updatedAt": "2026-02-08T15:35:28.907Z"
+  }
+}
