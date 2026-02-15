@@ -142,6 +142,15 @@ For Performance Management (TMF628), these patterns are **mandatory** to pass MC
    - `indicatorUnit`: Use instead of `unitOfMeasure` for standard compliance.
    - `valueType`: Match the primitive type used in `indicatorType`.
 
+3. **TMF Field Name Mapping (Crucial for AI Agents)**:
+   In the MCP middleware, field names starting with `@` (like `@type`, `@schemaLocation`) are mapped to an `at` prefix (e.g., `atType`, `atSchemaLocation`). This avoids issues with AI agents during tool calls.
+   - `@type` becomes `atType`
+   - `@baseType` becomes `atBaseType`
+   - `@schemaLocation` becomes `atSchemaLocation`
+   - `@referredType` becomes `atReferredType`
+
+   Always use the `at` prefix when sending or receiving these fields via the MCP tools.
+
 ## Verification Checklist
 
 - [x] OpenAPI spec parsed (Metadata/Schemas/Enums)
