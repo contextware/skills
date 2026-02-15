@@ -169,16 +169,8 @@ The Skill Builder Agent helps users create portable skills through dialogue:
 ### Phase 2: Iterative Refinement
 - Draft skill content collaboratively
 - Create/refine scripts as needed
-- **Create supporting directories dynamically** as needed:
-  - `scripts/` - When adding executable scripts
-  - `examples/` - When adding usage examples
-  - `references/` - When adding API docs, specs, or reference material
-  - `assets/` - When adding images, diagrams, or other media
-  - Only create directories when you have content to put in them (no empty scaffolding)
 - Test the workflow by executing steps
 - Refine based on results
-
-**IMPORTANT**: Don't assume directories exist. If you need to write a script but the `scripts/` directory doesn't exist yet, create it first. Same for `examples/`, `references/`, and `assets/`. Skills may start minimal and grow over time.
 
 ### Phase 3: Save & Publish
 - When workflow succeeds, suggest saving

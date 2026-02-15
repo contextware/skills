@@ -1,11 +1,11 @@
 {
   "id": "jira-issue-manager-success-1",
   "name": "List Jira Issue Types",
-  "description": "Verify the agent can use the list-issue-types script to retrieve available issue types for a Jira project.",
+  "description": "Verify the agent can use the get-issue-types script to retrieve available issue types for a Jira project.",
   "skillName": "jira-issue-manager",
   "type": "success",
   "input": {
-    "prompt": "Run the scripts/list-issue-types.cjs script using your configured Nango credentials to list the available issue types for my Jira project. Return a list of the issue names and their corresponding IDs."
+    "prompt": "Run the scripts/get-issue-types.js script using your configured Nango credentials to list the available issue types for my Jira project. Return a list of the issue names and their corresponding IDs."
   },
   "expectedOutput": {
     "shouldContain": [
