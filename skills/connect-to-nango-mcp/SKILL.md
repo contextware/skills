@@ -51,7 +51,7 @@ The Nango MCP server uses header-based authentication at connection time.
 | `NANGO_DEFAULT_USER_ID` | Your user identifier | `user@example.com` | Script uses this to FIND the connection |
 | `connectionId` | Nango's connection ID | `hubspot-abc123` | Required `connection-id` header value |
 
-**The `connection-id` header MUST be the `connectionId` returned by `check-auth.js`, NOT the `NANGO_DEFAULT_USER_ID`.**
+**The `connection-id` header MUST be the `connectionId` returned by `check-auth.cjs`, NOT the `NANGO_DEFAULT_USER_ID`.**
 
 Example script output:
 ```json
@@ -69,8 +69,14 @@ Example script output:
 **IMPORTANT - Understand the Goal**:
 This skill is NOT about "connecting to Nango" as an end goal. This skill enables you to **accomplish user tasks** (like getting HubSpot data, listing Salesforce records, etc.) by using Nango as the integration proxy. The connection steps are prerequisites that should flow seamlessly into actually using the tools to fulfill the user's request.
 
-### Phase 1: Check Connection Status
-First, determine if the Nango MCP server is already connected. If Nango-specific tools (like `whoami` or `list_contacts`) are already available in your environment, you can skip ahead and use those tools immediately to fulfill the user's request.
+### Phase 1: Verify Tool Availability
+First, check if Nango-specific tools (like `whoami`, `list_contacts`, `create_contact`, `query`) are already available in your current execution context.
+
+**Tools already available?** Skip to Phase 3 (Step 3.4) and use the tools immediately to fulfill the user's request.
+
+**Tools NOT available, but you can connect to MCP servers?** Continue to Phase 2 to obtain credentials, then Phase 3 to connect.
+
+**Cannot connect to MCP servers from this context?** This skill requires MCP tools that must be configured before use. Add the Nango MCP server to your agent's MCP configuration with the headers documented in Phase 3. After configuration, restart the agent and retry.
 
 ### Phase 2: Handle Authentication
 If tools are not available, you must obtain a `connectionId` by running the authentication script.
@@ -79,9 +85,9 @@ If tools are not available, you must obtain a `connectionId` by running the auth
 
 2. **Get Secret Key**: Attempt to retrieve the `NANGO_SECRET_KEY` from the environment variables (e.g., via platform tools or direct environment access). Do NOT ask the user for this key if it is already available.
 
-3. **Run the authentication script**: Execute `scripts/check-auth.js` passing the inferred provider and the retrieved secret key.
+3. **Run the authentication script**: Execute `scripts/check-auth.cjs` passing the inferred provider and the retrieved secret key.
    ```bash
-   node scripts/check-auth.js <provider> <secret_key>
+   node scripts/check-auth.cjs <provider> <secret_key>
    ```
 
 4. **Parse the script output (CRITICAL)**: The script outputs JSON to stdout. You MUST parse this JSON and extract the `connectionId` field.
@@ -130,7 +136,7 @@ Configure the Nango MCP server with these three required headers (use your platf
   2. `connection-id`: `<connectionId>` ← **Use the `connectionId` from Phase 2 script output**
   3. `provider-config-key`: `<provider>` (e.g., "hubspot", "salesforce")
 
-**⚠️ COMMON MISTAKE**: Do NOT use `NANGO_DEFAULT_USER_ID` or any email address as the `connection-id`. The `connection-id` must be the Nango connection identifier returned by `check-auth.js` (e.g., `hubspot-abc123`), not a user email.
+**⚠️ COMMON MISTAKE**: Do NOT use `NANGO_DEFAULT_USER_ID` or any email address as the `connection-id`. The `connection-id` must be the Nango connection identifier returned by `check-auth.cjs` (e.g., `hubspot-abc123`), not a user email.
 
 *Platform-specific notes:*
 - Some platforms may require separate calls to provision each header
@@ -140,7 +146,7 @@ Configure the Nango MCP server with these three required headers (use your platf
 **Step 3.2 - Connect to MCP Server:**
 Establish connection to the Nango MCP server. The server will validate your headers and return available tools based on the provider.
 
-*For agents that support programmatic MCP connections and use the MCP SDK:* Use the reference script `scripts/connect-direct.js` which demonstrates the connection pattern using the MCP SDK. See the "scripts/connect-direct.js" section below for details.
+*For agents that support programmatic MCP connections and use the MCP SDK:* Use the reference script `scripts/connect-direct.cjs` which demonstrates the connection pattern using the MCP SDK. See the "scripts/connect-direct.cjs" section below for details.
 
 *For agents that suppport programmatic MCP connections but do not use the MCP SDK: They can use the following pattern:*
 
@@ -327,18 +333,18 @@ NOW use the appropriate tool(s) to fulfill what the user actually asked for. For
 
 ## Bundled Scripts
 
-### scripts/check-auth.js
+### scripts/check-auth.cjs
 Checks Nango authentication status and initiates the authentication flow if needed.
 
 **Usage:**
-`node check-auth.js <provider> <secret_key>`
+`node check-auth.cjs <provider> <secret_key>`
 
 **Output:** JSON with `status` (success, needs_auth, error) and relevant data.
 
-### scripts/config-helper.js
+### scripts/config-helper.cjs
 Utility to help generate configuration snippets for various agent platforms.
 
-### scripts/connect-direct.js
+### scripts/connect-direct.cjs
 Reference script showing how to programmatically connect to the Nango MCP server in a one-off manner.
 
 **When to Use:**
@@ -360,12 +366,12 @@ export CONNECTION_ID="connection-id-from-check-auth"
 export INTEGRATION_ID="hubspot"  # or other provider
 
 # Run the script
-node connect-direct.js
+node connect-direct.cjs
 ```
 
 **Environment Variables:**
 - `NANGO_SECRET_KEY` or `NANGO_SECRET_KEY_DEV` (required): Your Nango secret key
-- `CONNECTION_ID` (required): The connection ID from OAuth (obtain via `check-auth.js`)
+- `CONNECTION_ID` (required): The connection ID from OAuth (obtain via `check-auth.cjs`)
 - `INTEGRATION_ID` or `PROVIDER_CONFIG_KEY` (required): Provider name (e.g., 'hubspot', 'salesforce')
 - `NANGO_MCP_URL` (optional): MCP server URL (defaults to 'https://api.nango.dev/mcp')
 
@@ -377,8 +383,8 @@ node connect-direct.js
 
 ## Troubleshooting
 
-- **HTTP 400 Bad Request**: This usually means the `connection-id` header is wrong. Verify you are using the `connectionId` from `check-auth.js` output, NOT `NANGO_DEFAULT_USER_ID`. The connection-id should look like `hubspot-abc123`, not an email address.
+- **HTTP 400 Bad Request**: This usually means the `connection-id` header is wrong. Verify you are using the `connectionId` from `check-auth.cjs` output, NOT `NANGO_DEFAULT_USER_ID`. The connection-id should look like `hubspot-abc123`, not an email address.
 - **Authentication failed**: Verify the `NANGO_SECRET_KEY` and ensure the provider is configured in your Nango account.
 - **Tools not appearing**: Ensure the headers are correctly sent during the MCP connection handshake.
 - **Connection-id not found**: The user may need to complete the authentication flow via the provided `authUrl`.
-- **Using wrong connection-id**: If you used an email address (like `user@example.com`) as the `connection-id`, that's incorrect. Re-run `check-auth.js` and use the `connectionId` field from the JSON output.
+- **Using wrong connection-id**: If you used an email address (like `user@example.com`) as the `connection-id`, that's incorrect. Re-run `check-auth.cjs` and use the `connectionId` field from the JSON output.
